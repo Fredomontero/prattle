@@ -1,0 +1,24 @@
+.signup-container{
+    background-color: #00323a;
+    color: #fff;
+    width: 40%;
+    text-align: center;
+    padding: 5% 10px 10%;
+    margin: 10% 30%;
+}
+
+.signup-form input{
+    display: block;
+    width: 40%;
+    height: 35px;
+    margin: 10px 30% 10px;
+    box-sizing: border-box;
+    font-size: 17px;
+}
+
+.signup-form input[type="button"]{
+    background-color: #059033;
+    border: 1px #059033;
+    color: #fff;
+    font-size: 17px;
+}
