@@ -5,37 +5,37 @@ class SignupPage extends Component {
 
     constructor(props){
         super(props);
-        this.firstnameEl = React.createRef();
-        this.lastnameEl = React.createRef();
-        this.emailEl =  React.createRef();
-        this.passwordEl = React.createRef();
-        this.passwordConfirmationEl = React.createRef();
+        
+        this.state = {
+            firstname: '',
+            lastname: '',
+            email: '',
+            password: '',
+            passwordConfirmation: ''
+        }
     }
 
     submitHandler = (event) => {
         event.preventDefault();
-        const firstname = this.firstnameEl.current.value;
-        const lastname = this.lastnameEl.current.value;
-        const email = this.emailEl.current.value;
-        const password = this.passwordEl.current.value;
-        const passwordConfirmation = this.passwordConfirmationEl.current.value;
+        const firstname = this.state.firstname;
+        const lastname = this.state.lastname;
+        const email = this.state.email;
+        const password = this.state.password;
+        const passwordConfirmation = this.state.passwordConfirmation;
 
         //very simple validation
         if( firstname.trim().length === 0 || lastname.trim().length === 0 || email.trim().length === 0 || password.trim().length === 0 || passwordConfirmation.trim().length === 0 ){
             return;
         }
 
-        const requestBody = {
+        const requestBodyAuth = {
             query: `
                 mutation{
                     createUser(userInput: {
-                        firstname: "${firstname}",
-                        lastname: "${lastname}",
                         email: "${email}",
                         password: "${password}"
                     }){
                         _id
-                        firstname
                         email
                     }
                 }
@@ -44,28 +44,69 @@ class SignupPage extends Component {
 
         fetch('http://localhost:4000/graphql', {
             method: 'POST',
-            body: JSON.stringify(requestBody),
+            body: JSON.stringify(requestBodyAuth),
             headers: {
                 'Content-Type': 'application/json'
             }
         })
         .then( res => {
             if(res.status !== 200 && res.status !== 201){
-                throw new Error("Failed!");
+                throw new Error("Failed updating the auth database");
             }
             return res.json();
         })
         .then(resData => {
-            console.log(resData);
-            this.firstnameEl.current.value = "";
-            this.lastnameEl.current.value = "";
-            this.emailEl.current.value = "";
-            this.passwordEl.current.value = "";
-            this.passwordConfirmationEl.current.value = "";
+            this.setState({
+                firstname: '',
+                lastname: '',
+                email: '',
+                password: '',
+                passwordConfirmation: ''
+            });
+            // console.log(resData);
+            const tempId = resData.data.createUser._id;
+            const requestBody = {
+                query: `
+                    mutation{
+                        createUser(userInput: {
+                            _id: "${tempId}"
+                            firstname: "${firstname}",
+                            lastname: "${lastname}",
+                            email: "${email}",
+                            password: "${password}"
+                        }){
+                            _id
+                            firstname
+                            email
+                        }
+                    }
+                `
+            }
+            return fetch('http://localhost:4001/graphql', {
+                method: 'POST',
+                body: JSON.stringify(requestBody),
+                headers: {
+                    'Content-Type': 'application/json'
+                }
+            })
+        })
+        .then(resBackend => {
+            if(resBackend.status !== 200 && resBackend.status !== 201){
+                throw new Error("Failed updating the backend database");
+            }
+            return resBackend.json();
+        })
+        .then(result => {
+            console.log(result);
         })
         .catch(error => {
             console.log(error);
         })
+    }
+
+    handleChange = event => {
+        const { value, name } = event.target;
+        this.setState({[name]: value});
     }
     
     render(){
@@ -73,11 +114,11 @@ class SignupPage extends Component {
             <div className="signup-container">
                 <h1>Sign up</h1>
                 <form className="signup-form">
-                    <input type="text" id="firstname" placeholder="First name" ref={this.firstnameEl}/>
-                    <input type="text" id="lastname" placeholder="Last name" ref={this.lastnameEl}/>
-                    <input type="email" id="email" placeholder="Email" ref={this.emailEl}/>
-                    <input type="password" id="password" placeholder="Password" ref={this.passwordEl}/>
-                    <input type="password" id="passwordConfirmation" placeholder="Confirm password" ref={this.passwordConfirmationEl}/>
+                    <input name='firstname' type="text" id="firstname" placeholder="First name" value={this.state.firstname} onChange={ this.handleChange }/>
+                    <input name='lastname' type="text" id="lastname" placeholder="Last name" value={this.state.lastname} onChange={ this.handleChange }/>
+                    <input name='email' type="email" id="email" placeholder="Email" value={this.state.email} onChange={ this.handleChange }/>
+                    <input name='password' type="password" id="password" placeholder="Password" value={this.state.password} onChange={ this.handleChange }/>
+                    <input name='passwordConfirmation' type="password" id="passwordConfirmation" placeholder="Confirm password" value={this.state.passwordConfirmation} onChange={ this.handleChange }/>
                     <input type="button" value="Sign up" onClick={ this.submitHandler }/>
             </form>
             </div>
