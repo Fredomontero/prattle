@@ -1,4 +1,6 @@
 import React, { Component } from 'react';
+import { connect } from "react-redux";
+import { signIn } from "../../redux/actions/user.actions";
 import './login-page.css';
 
 class LoginPage extends Component {
@@ -14,6 +16,7 @@ class LoginPage extends Component {
 
     submitHandler = (event) => {
         event.preventDefault();
+        const { signIn } = this.props;
         const email = this.state.email;
         const password = this.state.password;
 
@@ -22,41 +25,43 @@ class LoginPage extends Component {
             return;
         }
 
-        let requestBody = {
-            query: `
-                query {
-                    login(email: "${email}", password: "${password}"){
-                        userId
-                        token
-                        tokenExpiration
-                    }
-                }
-            `
-        };
+        signIn(email, password);
 
-        fetch('http://localhost:4000/graphql', {
-            method: 'POST',
-            body: JSON.stringify(requestBody),
-            headers: {
-                'Content-Type': 'application/json'
-            }
-        })
-        .then( res => {
-            if(res.status !== 200 && res.status !== 201){
-                throw new Error("Failed logging in");
-            }
-            return res.json();
-        })
-        .then(resData => {
-            this.setState({
-                email: '',
-                password: ''
-            });
-            console.log(resData);
-        })
-        .catch(error => {
-            console.log(error);
-        })
+        // let requestBody = {
+        //     query: `
+        //         query {
+        //             login(email: "${email}", password: "${password}"){
+        //                 userId
+        //                 token
+        //                 tokenExpiration
+        //             }
+        //         }
+        //     `
+        // };
+
+        // fetch('http://localhost:4000/graphql', {
+        //     method: 'POST',
+        //     body: JSON.stringify(requestBody),
+        //     headers: {
+        //         'Content-Type': 'application/json'
+        //     }
+        // })
+        // .then( res => {
+        //     if(res.status !== 200 && res.status !== 201){
+        //         throw new Error("Failed logging in");
+        //     }
+        //     return res.json();
+        // })
+        // .then(resData => {
+        //     this.setState({
+        //         email: '',
+        //         password: ''
+        //     });
+        //     console.log(resData);
+        // })
+        // .catch(error => {
+        //     console.log(error);
+        // })
     }
 
     handleChange = event => {
@@ -78,4 +83,8 @@ class LoginPage extends Component {
     }
 }
 
-export default LoginPage;
+const mapDispatchToProps = dispatch => ({
+    signIn: (email, password) => dispatch(signIn({email, password}))
+})
+
+export default connect(null, mapDispatchToProps)(LoginPage);

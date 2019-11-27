@@ -63,7 +63,7 @@ class SignupPage extends Component {
                 password: '',
                 passwordConfirmation: ''
             });
-            // console.log(resData);
+            console.log(resData);
             const tempId = resData.data.createUser._id;
             const requestBody = {
                 query: `
