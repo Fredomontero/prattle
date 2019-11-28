@@ -1,7 +1,12 @@
 import { takeLatest, put, all, call} from "redux-saga/effects";
 import { loginSuccess, loginFailure } from "../redux/actions/user.actions";
 
-export function* loginWithEmail({payload: {email, password}}){
+export function* loginWithEmail(action){
+    var email = (action) ? action.payload.email : "";
+    var password = (action) ? action.payload.password : "";
+    yield console.log("Email: " + email +" Password: " + password);
+    // var email = "alfredo@test.com";
+    // var password = "holamundo";
     let requestBody = {
         query: `
             query {
