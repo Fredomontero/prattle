@@ -8,17 +8,15 @@ class LoginPage extends Component {
     constructor(props){
         super(props);
         
-        this.state = {
-            email: '',
-            password: ''
-        }
+        this.emailRef = React.createRef();
+        this.passwordRef = React.createRef();
     }
 
     submitHandler = (event) => {
         event.preventDefault();
         const { signIn } = this.props;
-        const email = this.state.email;
-        const password = this.state.password;
+        const email = this.emailRef.current.value;
+        const password = this.passwordRef.current.value;
 
         //very simple validation
         if( email.trim().length === 0 || password.trim().length === 0 ){
@@ -26,47 +24,6 @@ class LoginPage extends Component {
         }
 
         signIn(email, password);
-
-        // let requestBody = {
-        //     query: `
-        //         query {
-        //             login(email: "${email}", password: "${password}"){
-        //                 userId
-        //                 token
-        //                 tokenExpiration
-        //             }
-        //         }
-        //     `
-        // };
-
-        // fetch('http://localhost:4000/graphql', {
-        //     method: 'POST',
-        //     body: JSON.stringify(requestBody),
-        //     headers: {
-        //         'Content-Type': 'application/json'
-        //     }
-        // })
-        // .then( res => {
-        //     if(res.status !== 200 && res.status !== 201){
-        //         throw new Error("Failed logging in");
-        //     }
-        //     return res.json();
-        // })
-        // .then(resData => {
-        //     this.setState({
-        //         email: '',
-        //         password: ''
-        //     });
-        //     console.log(resData);
-        // })
-        // .catch(error => {
-        //     console.log(error);
-        // })
-    }
-
-    handleChange = event => {
-        const { value, name } = event.target;
-        this.setState({[name]: value});
     }
     
     render(){
@@ -74,8 +31,8 @@ class LoginPage extends Component {
             <div className="signup-container">
                 <h1>Login</h1>
                 <form className="signup-form">
-                    <input name="email" type="email" id="email" placeholder="Email" value={this.state.email} onChange={ this.handleChange }/>
-                    <input name="password" type="password" id="password" placeholder="Password" value={this.state.password} onChange={ this.handleChange }/>
+                    <input type="email" id="email" placeholder="Email" ref={this.emailRef}/>
+                    <input type="password" id="password" placeholder="Password" ref={this.passwordRef}/>
                     <input type="button" value="Login" onClick={ this.submitHandler }/>
             </form>
             </div>

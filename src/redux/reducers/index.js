@@ -1,5 +1,5 @@
 const initialState = {
-    user: {},
+    loggedIn: {},
     error: {}
 };
 
@@ -8,12 +8,13 @@ function rootReducer(state = initialState, action){
         case "LOGIN_SUCCESS":
             return{
                 ...state,
-                user: action.payload,
+                loggedIn: action.payload,
                 error: null 
             };
         case "LOGIN_FAILURE":
             return{
                 ...state,
+                loggedIn: null,
                 error: action.payload
             };
         default:

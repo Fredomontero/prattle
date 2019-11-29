@@ -1,6 +1,6 @@
-export const signIn = emailAndPassword => ({
+export const signIn = data => ({
     type: "LOGIN_REQUEST",
-    payload: emailAndPassword
+    payload: data
 });
 
 export const loginSuccess = user => ({
