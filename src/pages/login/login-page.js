@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { connect } from "react-redux";
-import { signIn } from "../../redux/actions/user.actions";
+import { logIn } from "../../redux/actions/user.actions";
 import './login-page.css';
 
 class LoginPage extends Component {
@@ -14,7 +14,7 @@ class LoginPage extends Component {
 
     submitHandler = (event) => {
         event.preventDefault();
-        const { signIn } = this.props;
+        const { logIn } = this.props;
         const email = this.emailRef.current.value;
         const password = this.passwordRef.current.value;
 
@@ -23,7 +23,7 @@ class LoginPage extends Component {
             return;
         }
 
-        signIn(email, password);
+        logIn(email, password);
     }
     
     render(){
@@ -41,7 +41,7 @@ class LoginPage extends Component {
 }
 
 const mapDispatchToProps = dispatch => ({
-    signIn: (email, password) => dispatch(signIn({email, password}))
+    logIn: (email, password) => dispatch(logIn({email, password}))
 })
 
 export default connect(null, mapDispatchToProps)(LoginPage);

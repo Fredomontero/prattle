@@ -1,4 +1,4 @@
-export const signIn = data => ({
+export const logIn = data => ({
     type: "LOGIN_REQUEST",
     payload: data
 });
