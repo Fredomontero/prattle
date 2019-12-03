@@ -21,6 +21,7 @@ export function* loginWithEmail(action){
     let loginRequestOptions = {
         method: 'POST',
         body: JSON.stringify(loginRequestBody),
+        credentials: "include",
         headers: {
             'Content-Type': 'application/json'
         }

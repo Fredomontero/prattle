@@ -13,11 +13,6 @@ export const loginFailure = error => ({
     payload: error
 });
 
-export const createUser = user => ({
-    type: "CREATE_USER",
-    payload: user
-});
-
 export const createUserRequest = user => ({
     type: "CREATE_USER_REQUEST",
     payload: user
@@ -32,4 +27,9 @@ export const failToCreateUser = error => ({
     type: "FAIL_TO_CREATE_USER",
     payload: error
 });
+
+export const logout = value => ({
+    type: "LOGOUT",
+    payload: value
+})
 

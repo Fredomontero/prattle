@@ -17,6 +17,11 @@ function rootReducer(state = initialState, action){
                 loggedIn: null,
                 error: action.payload
             };
+        case "LOGOUT":
+            return{
+                ...state,
+                loggedIn: action.payload
+            }
         default:
             return state;
     }
