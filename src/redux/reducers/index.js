@@ -1,6 +1,6 @@
 const initialState = {
-    loggedIn: {},
-    error: {}
+    loggedIn: null,
+    error: null
 };
 
 function rootReducer(state = initialState, action){
@@ -21,6 +21,17 @@ function rootReducer(state = initialState, action){
             return{
                 ...state,
                 loggedIn: action.payload
+            }
+        case "FETCH_USER_SUCCESS":
+            return{
+                ...state,
+                loggedIn: action.payload
+            }
+        case "FETCH_USER_FAILURE":
+            return{
+                ...state,
+                loggedIn: null,
+                error: action.payload
             }
         default:
             return state;

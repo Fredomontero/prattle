@@ -31,5 +31,19 @@ export const failToCreateUser = error => ({
 export const logout = value => ({
     type: "LOGOUT",
     payload: value
-})
+});
+
+export const getUser = () => ({
+    type: "GET_USER"
+});
+
+export const fetchUserSuccess = user => ({
+    type: "FETCH_USER_SUCCESS",
+    payload: user
+});
+
+export const fetchUserFailure = error => ({
+    type: "FETCH_USER_FAILURE",
+    payload: error
+});
 
