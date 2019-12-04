@@ -123,7 +123,7 @@ export function* fetchUser(){
     let fetchUserRequestBody = {
         query: `
             query {
-                fetchUser(){
+                fetchUser {
                     userId
                     email
                 }
@@ -148,7 +148,7 @@ export function* fetchUser(){
             yield put(fetchUserFailure(resData.errors[0].message));
         }else{
             yield put(
-                fetchUserSuccess(resData.data.login)
+                fetchUserSuccess(resData.data.fetchUser)
             )
         }
     }catch(error){
