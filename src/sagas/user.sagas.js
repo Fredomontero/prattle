@@ -7,7 +7,10 @@ import {
     fetchUserFailure, 
     fetchUserSuccess,
     logoutFailure,
-    logoutSuccess
+    logoutSuccess,
+    loadProfileFailure,
+    loadProfileSuccess
+
 } from "../redux/actions/user.actions";
 
 
@@ -210,8 +213,53 @@ export function* onLogout(){
     yield takeEvery("LOGOUT", logout)
 }
 
+export function* loadProfile(action){
+    var userId = (action) ? action.payload : "";
+    
+    let loadProfileBody = {
+        query: `
+            query {
+                loadProfile(userId: "${userId}"){
+                    _id
+                    firstname
+                    lastname
+                    email
+                }
+            }
+        `
+    };
+
+    let loadProfileOptions = {
+        method: 'POST',
+        body: JSON.stringify(loadProfileBody),
+        credentials: "include",
+        headers: {
+            'Content-Type': 'application/json'
+        }
+    };
+
+    try{
+        let res = yield call(fetch, 'http://localhost:4001/graphql', loadProfileOptions);
+        let userData = yield res.json();
+        console.log("userData: ", userData);
+        if(userData.errors){
+            yield put(loadProfileFailure(userData.errors[0].message));
+        }else{
+            yield put(
+                loadProfileSuccess(userData.data.loadProfile)
+            )
+        }
+    }catch(error){
+        yield put(loadProfileFailure(error));
+    }
+}
+
+export function* onLoadProfile(){
+    yield takeEvery("LOAD_PROFILE", loadProfile)
+}
+
 //----------------------------------------------------------------
 
 export function* userSagas(){
-    yield all([call(onSignIn), call(onCreateUser), call(getUser), call(onLogout)]);
+    yield all([call(onSignIn), call(onCreateUser), call(getUser), call(onLogout), call(onLoadProfile)]);
 }

@@ -39,6 +39,17 @@ function rootReducer(state = initialState, action){
                 loggedIn: null,
                 error: action.payload
             }
+        case "LOAD_PROFILE_SUCCESS":
+            return{
+                ...state,
+                loggedIn: action.payload
+            }
+        case "LOAD_PROFILE_FAILURE":
+            return{
+                ...state,
+                loggedIn: null,
+                error: action.payload
+            }
         default:
             return state;
     }

@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { connect } from "react-redux";
-import { logout } from "../../redux/actions/user.actions";
+import { logout, loadProfile } from "../../redux/actions/user.actions";
 import './dashboard-page.css';
 
 class DashboardPage extends Component{
@@ -9,9 +9,13 @@ class DashboardPage extends Component{
         console.log("Dashboard Component");
     }
 
+    componentDidMount(){
+        const { loadProfile } = this.props;
+        loadProfile(this.props.loggedIn.userId);
+    }
+
     submitHandler = () => {
         const { logout } = this.props;
-        
         logout();
     }
 
@@ -20,6 +24,10 @@ class DashboardPage extends Component{
             <div>
                 <h1>Dashboard</h1>
                 <h3>Que pedo prros, listo para este chat mamalón o qué? &#128021;</h3>
+                <h3> {this.props.loggedIn.userId} </h3>
+                {
+                    (this.props.loggedIn.email) ? (<h1>Welcome {this.props.loggedIn.firstname}</h1>):(<h1>Loading...</h1>)
+                }
                 <input type="button" value="Logout" onClick={ this.submitHandler }/>
             </div>
         )
@@ -27,7 +35,8 @@ class DashboardPage extends Component{
 }
 
 const mapDispatchToProps = dispatch => ({
-    logout: () => dispatch(logout())
+    logout: () => dispatch(logout()),
+    loadProfile:(userId) => dispatch(loadProfile(userId))
 })
 
 const mapStateToProps =(state) => {

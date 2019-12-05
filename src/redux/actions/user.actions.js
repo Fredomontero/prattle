@@ -56,3 +56,19 @@ export const fetchUserFailure = error => ({
     payload: error
 });
 
+export const loadProfile = userId => ({
+    type: "LOAD_PROFILE",
+    payload: userId
+});
+
+export const loadProfileSuccess = user => ({
+    type: "LOAD_PROFILE_SUCCESS",
+    payload: user
+});
+
+export const loadProfileFailure = error => ({
+    type: "LOAD_PROFILE_FAILURE",
+    payload: error
+});
+
+
