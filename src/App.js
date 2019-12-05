@@ -13,10 +13,9 @@ import './App.css';
 class App extends Component{
   constructor(props){
     super(props);
-    console.log("E we");
   }
 
-  componentWillMount(){
+  componentDidMount(){
     // console.log("Que pedo we apenas me voy a renderear");
     const { getUser } = this.props;
     getUser();
@@ -27,9 +26,42 @@ class App extends Component{
     return (
       <BrowserRouter>
         <Switch>
+          {/* HOME PAGE ROUTE */}
+          <Route
+            exact
+            path="/"
+            render={ () => 
+              (this.props.loggedIn !== null) ? (
+                <Redirect from="/" to="dashboard"/>
+              ):(
+                <Redirect from="/" to="/login"/>
+              )
+            } 
+          />
+          {/* SIGNUP PAGE ROUTE */}
           <Route path="/signup" component={ SignupPage }/>
-          <Route path="/login"  component={ LoginPage }/>
-          <Route path="/dashboard" component={ DashboardPage }/>
+          {/* LOGIN PAGE ROUTE */}
+          <Route 
+            path="/login"  
+            render={ () => 
+              (this.props.loggedIn !== null) ? (
+                <Redirect from="/" to="dashboard"/>
+              ):(
+                <LoginPage/>
+              )
+            } 
+          />
+          {/* DASHBOARD PAGE ROUTE */}
+          <Route 
+            path="/dashboard" 
+            render={ () => 
+              (this.props.loggedIn !== null) ? (
+                <DashboardPage/>
+              ):(
+                <Redirect from="/dashboard" to="/login"/>
+              )
+            }
+          />
         </Switch>
       </BrowserRouter>
     );  
@@ -38,7 +70,9 @@ class App extends Component{
 
 function mapStateToProps(state){
   const { loggedIn } = state;
-  return { loggedIn: loggedIn }
+  if(loggedIn)
+    console.log("Logged in: ", loggedIn.userId);
+  return { loggedIn: (loggedIn) ? loggedIn.userId : null }
 }
 
 const mapDispatchToProps = dispatch => ({

@@ -6,20 +6,20 @@ import './dashboard-page.css';
 class DashboardPage extends Component{
     constructor(props){
         super(props);
-        this.state ={
-
-        }
+        console.log("Dashboard Component");
     }
 
     submitHandler = () => {
         const { logout } = this.props;
-        logout(null);
+        
+        logout();
     }
 
     render(){
         return(
             <div>
                 <h1>Dashboard</h1>
+                <h3>Que pedo prros, listo para este chat mamalón o qué? &#128021;</h3>
                 <input type="button" value="Logout" onClick={ this.submitHandler }/>
             </div>
         )
@@ -27,7 +27,7 @@ class DashboardPage extends Component{
 }
 
 const mapDispatchToProps = dispatch => ({
-    logout: (value) => dispatch(logout(value))
+    logout: () => dispatch(logout())
 })
 
 const mapStateToProps =(state) => {

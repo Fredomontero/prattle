@@ -1,5 +1,14 @@
 import { takeEvery, put, all, call} from "redux-saga/effects";
-import { loginSuccess, loginFailure, userCreated, failToCreateUser, fetchUserFailure, fetchUserSuccess } from "../redux/actions/user.actions";
+import { 
+    loginSuccess, 
+    loginFailure, 
+    userCreated, 
+    failToCreateUser, 
+    fetchUserFailure, 
+    fetchUserSuccess,
+    logoutFailure,
+    logoutSuccess
+} from "../redux/actions/user.actions";
 
 
 export function* loginWithEmail(action){
@@ -161,6 +170,48 @@ export function* getUser(){
     yield takeEvery("GET_USER", fetchUser)
 }
 
+export function* logout(){
+    let logoutRequestBody = {
+        query: `
+            query {
+                logout {
+                    userId
+                }
+            }
+        `
+    };
+
+    let logoutOptions = {
+        method: 'POST',
+        body: JSON.stringify(logoutRequestBody ),
+        credentials: "include",
+        headers: {
+            'Content-Type': 'application/json'
+        }
+    };
+
+    try{
+        let res = yield call(fetch, 'http://localhost:4000/graphql', logoutOptions);
+        let resData = yield res.json();
+        console.log("resData on logout: ", resData);
+        if(resData.errors){
+            yield put(logoutFailure(resData.errors[0].message));
+        }else{
+            yield put(
+                logoutSuccess(resData.data.logout)
+            )
+        }
+    }catch(error){
+        yield put(logoutFailure(error));
+    }
+}
+
+export function* onLogout(){
+    yield takeEvery("LOGOUT", logout)
+}
+
+//----------------------------------------------------------------
+
 export function* userSagas(){
-    yield all([call(onSignIn), call(onCreateUser), call(getUser)]);
+    yield all([call(onSignIn), call(onCreateUser), call(getUser), call(onLogout)]);
 }

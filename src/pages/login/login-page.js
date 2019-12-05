@@ -10,6 +10,7 @@ class LoginPage extends Component {
         
         this.emailRef = React.createRef();
         this.passwordRef = React.createRef();
+
     }
 
     submitHandler = (event) => {

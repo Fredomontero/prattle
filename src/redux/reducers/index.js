@@ -17,17 +17,23 @@ function rootReducer(state = initialState, action){
                 loggedIn: null,
                 error: action.payload
             };
-        case "LOGOUT":
-            return{
-                ...state,
-                loggedIn: action.payload
-            }
         case "FETCH_USER_SUCCESS":
             return{
                 ...state,
                 loggedIn: action.payload
             }
         case "FETCH_USER_FAILURE":
+            return{
+                ...state,
+                loggedIn: null,
+                error: action.payload
+            }
+        case "LOGOUT_SUCCESS":
+            return{
+                ...state,
+                loggedIn: action.payload
+            }
+        case "LOGOUT_FAILURE":
             return{
                 ...state,
                 loggedIn: null,
