@@ -2,11 +2,19 @@ import React, { Component } from 'react';
 import { connect } from "react-redux";
 import { logout, loadProfile } from "../../redux/actions/user.actions";
 import './dashboard-page.css';
+import ChatsComponent from "../../components/chats/chats.component";
+import SettingsComponent from "../../components/settings/settings.component";
+import UsersComponent from "../../components/users/users.component";
+import { MdChatBubble, MdPersonAdd, MdSettings, MdPowerSettingsNew } from "react-icons/md";
+
 
 class DashboardPage extends Component{
     constructor(props){
         super(props);
         console.log("Dashboard Component");
+        this.state = {
+            section: "chats"
+        }
     }
 
     componentDidMount(){
@@ -22,13 +30,32 @@ class DashboardPage extends Component{
     render(){
         return(
             <div>
-                <h1>Dashboard</h1>
-                <h3>Que pedo prros, listo para este chat mamalón o qué? &#128021;</h3>
-                <h3> {this.props.loggedIn.userId} </h3>
-                {
-                    (this.props.loggedIn.email) ? (<h1>Welcome {this.props.loggedIn.firstname}</h1>):(<h1>Loading...</h1>)
-                }
-                <input type="button" value="Logout" onClick={ this.submitHandler }/>
+                {/* NAVBAR */}
+                <div className="navbar">
+                    <h1>Dashboard  &#128021;</h1>
+                </div>
+                <div className="dashboard-container">
+                <div className="sidebar">
+                    <ul>
+                        <li onClick={ () => this.setState({section: "chats"}) } ><MdChatBubble/></li>
+                        <li onClick={ () => this.setState({section: "users"}) } ><MdPersonAdd/></li>
+                        <li onClick={ () => this.setState({section: "settings"}) } ><MdSettings/></li>
+                        <li onClick={ this.submitHandler }><MdPowerSettingsNew/></li>
+                    </ul>
+                </div>
+                <div className="dashboard-body">
+                    {   (this.state.section === "chats") ? (
+                        <ChatsComponent/>
+                    ):(
+                        (this.state.section === "users") ? (
+                            <UsersComponent/>
+                        ) : (
+                            <SettingsComponent/>
+                        )
+                    )
+                    }
+                </div>
+                </div>
             </div>
         )
     }

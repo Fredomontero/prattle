@@ -16,7 +16,8 @@ class App extends Component{
   }
 
   componentDidMount(){
-    // console.log("Que pedo we apenas me voy a renderear");
+    console.log("Que pedo we apenas me voy a renderear [App Component]");
+    console.log("LoggedIn: ", this.props.loggedIn);
     const { getUser } = this.props;
     getUser();
 
@@ -58,7 +59,7 @@ class App extends Component{
               (this.props.loggedIn !== null) ? (
                 <DashboardPage/>
               ):(
-                <Redirect from="/dashboard" to="/login"/>
+                <Redirect to="/"/>
               )
             }
           />

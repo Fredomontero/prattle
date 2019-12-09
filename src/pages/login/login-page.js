@@ -13,6 +13,10 @@ class LoginPage extends Component {
 
     }
 
+    componentDidMount(){
+        console.log("On loginPage");
+    }
+
     submitHandler = (event) => {
         event.preventDefault();
         const { logIn } = this.props;
