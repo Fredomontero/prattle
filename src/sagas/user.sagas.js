@@ -11,7 +11,8 @@ import {
     loadProfileFailure,
     loadProfileSuccess,
     retrieveUsersSuccess,
-    retrieveUsersFailure
+    retrieveUsersFailure,
+    addContact
 
 } from "../redux/actions/user.actions";
 
@@ -303,6 +304,14 @@ export function* retrieveUsers(action){
 
 export function* onRetrieveUsers(){
     yield takeEvery("RETRIEVE_USERS", retrieveUsers)
+}
+
+export function* addContactRquest(action){
+    return null
+}
+
+export function* onAddContactRequest(){
+    yield takeEvery("SEND_CONTACT_REQUEST", addContactRquest)
 }
 
 //----------------------------------------------------------------

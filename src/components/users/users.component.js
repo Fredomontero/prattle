@@ -26,7 +26,8 @@ class UsersComponent extends Component{
     }
 
     addcontactHandler = (id) => {
-        console.log("The id is: ", id);
+        // console.log("The id is: ", id);
+        addContact(id);
     }
 
     
