@@ -71,4 +71,23 @@ export const loadProfileFailure = error => ({
     payload: error
 });
 
+export const retrieveUsers = pattern => ({
+    type: "RETRIEVE_USERS",
+    payload: pattern
+});
+
+export const retrieveUsersSuccess = user => ({
+    type: "RETRIEVE_USERS_SUCCESS",
+    payload: user
+});
+
+export const retrieveUsersFailure = error => ({
+    type: "RETRIEVE_USERS_FAILURE",
+    payload: error
+});
+
+export const addContact = user => ({
+    type: "SEND_CONTACT_REQUEST",
+    payload: user
+});
 

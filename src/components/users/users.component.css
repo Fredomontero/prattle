@@ -1,0 +1,23 @@
+.user-card{
+    border: 1px solid #000;
+    display: inline-block;
+    width: 20%;
+    margin: 1%;
+    padding: 10px;
+    text-align: center;
+}
+
+.profile-picture{
+    max-width: 100%;
+    border-radius: 150px;
+    border: 1px solid #000;
+}
+
+.add-buton{
+    background-color: #03a734;
+    color: #fff;
+    font-size: 18px;
+    width: 40%;
+    cursor: pointer;
+
+}

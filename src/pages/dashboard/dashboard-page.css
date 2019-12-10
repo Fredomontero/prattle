@@ -44,7 +44,6 @@
 }
 
 .dashboard-body{
-    background-color: #faebd7;
     margin-left: 80px;
     padding: 20px;
     width: 100%;
@@ -52,4 +51,8 @@
     height: 100%;
     position: fixed;
     
+}
+
+.navbar h3{
+    margin: 0px auto;
 }

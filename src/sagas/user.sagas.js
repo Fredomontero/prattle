@@ -9,7 +9,9 @@ import {
     logoutFailure,
     logoutSuccess,
     loadProfileFailure,
-    loadProfileSuccess
+    loadProfileSuccess,
+    retrieveUsersSuccess,
+    retrieveUsersFailure
 
 } from "../redux/actions/user.actions";
 
@@ -258,8 +260,53 @@ export function* onLoadProfile(){
     yield takeEvery("LOAD_PROFILE", loadProfile)
 }
 
+export function* retrieveUsers(action){
+    let pattern = (action) ? action.payload.pattern : "";
+    
+    let retrieveUsersBody = {
+        query: `
+            query {
+                retrieveUsers(pattern: "${pattern}"){
+                    _id
+                    firstname
+                    lastname
+                    email
+                }
+            }
+        `
+    };
+
+    let retrieveUsersOptions = {
+        method: 'POST',
+        body: JSON.stringify(retrieveUsersBody),
+        credentials: "include",
+        headers: {
+            'Content-Type': 'application/json'
+        }
+    };
+
+    try{
+        let res = yield call(fetch, 'http://localhost:4001/graphql', retrieveUsersOptions);
+        let usersData = yield res.json();
+        console.log("usersData: ", usersData);
+        if(usersData.errors){
+            yield put(retrieveUsersFailure(usersData.errors[0].message));
+        }else{
+            yield put(
+                retrieveUsersSuccess(usersData.data.retrieveUsers)
+            )
+        }
+    }catch(error){
+        yield put(retrieveUsersFailure(error));
+    }
+}
+
+export function* onRetrieveUsers(){
+    yield takeEvery("RETRIEVE_USERS", retrieveUsers)
+}
+
 //----------------------------------------------------------------
 
 export function* userSagas(){
-    yield all([call(onSignIn), call(onCreateUser), call(getUser), call(onLogout), call(onLoadProfile)]);
+    yield all([call(onSignIn), call(onCreateUser), call(getUser), call(onLogout), call(onLoadProfile), call(onRetrieveUsers)]);
 }
