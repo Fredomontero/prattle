@@ -101,3 +101,18 @@ export const addContactFailure = error => ({
     payload: error
 });
 
+export const handleRequest = data => ({
+    type: "HANDLE_FRIENDSHIP_REQUEST",
+    payload: data
+});
+
+export const handleRequestSuccess = user => ({
+    type: "HANDLE_FRIENDSHIP_REQUEST_SUCCESS",
+    payload: user
+});
+
+export const handleRequestFailure = error => ({
+    type: "HANDLE_FRIENDSHIP_REQUEST_FAILURE",
+    payload: error
+});
+

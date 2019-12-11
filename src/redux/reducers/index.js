@@ -63,16 +63,26 @@ function rootReducer(state = initialState, action){
                 tempData: null,
                 error: action.payload
             }
-            case "ADD_CONTACT_SUCCESS":
-                return{
-                    ...state,
-                    loggedIn: action.payload
-                }
-            case "ADD_CONTACT_FAILURE":
-                return{
-                    ...state,
-                    error: action.payload
-                }
+        case "ADD_CONTACT_SUCCESS":
+            return{
+                ...state,
+                loggedIn: action.payload
+            }
+        case "ADD_CONTACT_FAILURE":
+            return{
+                ...state,
+                error: action.payload
+            }
+        case "HANDLE_FRIENDSHIP_REQUEST_SUCCESS":
+        return{
+            ...state,
+            loggedIn: action.payload
+        }
+        case "HANDLE_FRIENDSHIP_REQUEST_FAILURE":
+            return{
+                ...state,
+                error: action.payload
+            }
         default:
             return state;
     }

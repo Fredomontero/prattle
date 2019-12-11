@@ -14,9 +14,9 @@ import {
     retrieveUsersFailure,
     addContact,
     addContactSuccess,
-    addContactFailure
-
-
+    addContactFailure,
+    handleRequestSuccess,
+    handleRequestFailure
 } from "../redux/actions/user.actions";
 
 
@@ -232,12 +232,18 @@ export function* loadProfile(action){
                     email
                     contacts
                     requests{
+                        requestId
                         sourceId
+                        sourceName
                         targetId
+                        targetName
                     }
                     pendingRequests{
+                        requestId
                         sourceId
+                        sourceName
                         targetId
+                        targetName
                     }
                 }
             }
@@ -319,13 +325,15 @@ export function* onRetrieveUsers(){
 }
 
 export function* addContactRequest(action){
-    console.log("Inside addContactRequest Saga")
+    console.log("Inside addContactRequest Saga");
     let addContactBody = {
         query: `
             mutation{
                 addContact(RequestInput: {
                     sourceId: "${action.payload.sourceId}",
-                    targetId: "${action.payload.targetId}"
+                    sourceName: "${action.payload.sourceName}",
+                    targetId: "${action.payload.targetId}",
+                    targetName: "${action.payload.targetName}"
                 }){
                     _id
                     firstname
@@ -333,12 +341,18 @@ export function* addContactRequest(action){
                     email
                     contacts
                     requests{
+                        requestId
                         sourceId
+                        sourceName
                         targetId
+                        targetName
                     }
                     pendingRequests{
+                        requestId
                         sourceId
+                        sourceName
                         targetId
+                        targetName
                     }
                 }
             }
@@ -374,8 +388,82 @@ export function* onAddContactRequest(){
     yield takeEvery("SEND_CONTACT_REQUEST", addContactRequest)
 }
 
+export function* resolveFriendshipRequest(action){
+    console.log("Inside resolveFriendshipRequest Saga");
+    // console.log("Action -> Payload");
+    // console.log(typeof action.payload.value);
+    let handleFriendshipRequestBody = {
+        query: `
+            mutation{
+                handleFriendshipRequest(HandleRequest: {
+                    value: ${action.payload.value},
+                    requestId: "${action.payload.requestId}",
+                    sourceId: "${action.payload.sourceId}",
+                    targetId: "${action.payload.targetId}"
+                }){
+                    _id
+                    firstname
+                    lastname
+                    email
+                    contacts
+                    requests{
+                        requestId
+                        sourceId
+                        sourceName
+                        targetId
+                        targetName
+                    }
+                    pendingRequests{
+                        requestId
+                        sourceId
+                        sourceName
+                        targetId
+                        targetName
+                    }
+                }
+            }
+        `
+    }
+
+    let handleFriendshipRequestOptions = {
+        method: 'POST',
+        body: JSON.stringify(handleFriendshipRequestBody),
+        credentials: "include",
+        headers: {
+            'Content-Type': 'application/json'
+        }
+    };
+
+    try{
+        let res = yield call(fetch, 'http://localhost:4001/graphql', handleFriendshipRequestOptions);
+        let resData = yield res.json();
+        console.log(resData);
+        if(resData.errors){
+            yield put(handleRequestFailure(resData.errors[0].message));
+        }else{
+            yield put(
+                handleRequestSuccess(resData.data.handleFriendshipRequest)
+            )
+        }
+    }catch(error){
+        yield put(handleRequestFailure(error));   
+    }
+}
+
+export function* onHandleRequest(){
+    yield takeEvery("HANDLE_FRIENDSHIP_REQUEST", resolveFriendshipRequest)
+} 
+
 //----------------------------------------------------------------
 
 export function* userSagas(){
-    yield all([call(onSignIn), call(onCreateUser), call(getUser), call(onLogout), call(onLoadProfile), call(onRetrieveUsers), call(onAddContactRequest)]);
+    yield all([call(onSignIn), 
+               call(onCreateUser), 
+               call(getUser), 
+               call(onLogout), 
+               call(onLoadProfile), 
+               call(onRetrieveUsers), 
+               call(onAddContactRequest),
+               call(onHandleRequest)
+            ]);
 }

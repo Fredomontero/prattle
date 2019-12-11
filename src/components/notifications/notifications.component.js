@@ -1,6 +1,7 @@
 import "./notifications.component.css";
 import React, { Component } from "react";
 import { connect } from "react-redux";
+import { handleRequest } from "../../redux/actions/user.actions";
 
 
 class NotificationsComponent extends Component{
@@ -13,6 +14,11 @@ class NotificationsComponent extends Component{
         console.log("currentUser in componentDidMount: ", this.props.currentUser);
     }
 
+    friendshipRequestHandler(value, requestId, sourceId, targetId){
+        const { handleRequest } = this.props;
+        handleRequest(value, requestId, sourceId, targetId);
+    }
+
     render(){
         return(
             <div className="notifications-container">
@@ -21,11 +27,10 @@ class NotificationsComponent extends Component{
                     (this.props.currentUser.pendingRequests.length > 0)?(
                         this.props.currentUser.pendingRequests.map( pendingRequest => {
                             return(
-                                <div>
+                                <div key={pendingRequest.requestId}>
                                     <h2>Pending Requests</h2>
                                     <div className="pending-request-frame">
-                                        <h4>From: {pendingRequest.sourceId}</h4>
-                                        <h4>To: {pendingRequest.targetId}</h4>
+                                        <h4>{ pendingRequest.targetName + " "} hasn't approve your friend request</h4>
                                     </div>
                                 </div>
                             )
@@ -36,14 +41,13 @@ class NotificationsComponent extends Component{
                     (this.props.currentUser.requests.length > 0)?(
                         this.props.currentUser.requests.map( request => {
                             return(
-                                <div>
+                                <div key={request.requestId}>
                                     <h2>Friendship Requests</h2>
-                                    <div className="request-frame">
-                                        <h4>From: {request.sourceId}</h4>
-                                        <h4>To: {request.targetId}</h4>
+                                    <div  className="request-frame">
+                                        <h4>{request.sourceName + " "} wants to be your friend</h4>
                                         <div className="request-buttons">
-                                            <input className="accept-buton" type="button" value="Accept"/>
-                                            <input className="decline-buton" type="button" value="Decline"/>
+                                            <input onClick = { () => this.friendshipRequestHandler(true, request.requestId, request.sourceId, request.targetId) } className="accept-buton" type="button" value="Accept"/>
+                                            <input onClick = { () => this.friendshipRequestHandler(false, request.requestId, request.sourceId, request.targetId) } className="decline-buton" type="button" value="Decline"/>
                                         </div>
                                     </div>
                                 </div>
@@ -60,6 +64,10 @@ class NotificationsComponent extends Component{
 function mapStateToProps(state){
     const { loggedIn } = state;
     return { currentUser: (loggedIn) ? loggedIn : null }
-  }
+}
 
-export default connect(mapStateToProps, null)(NotificationsComponent);
+const mapDispatchToProps = dispatch => ({
+    handleRequest: (value, requestId, sourceId, targetId) => dispatch(handleRequest({value, requestId, sourceId, targetId}))
+  })
+
+export default connect(mapStateToProps, mapDispatchToProps)(NotificationsComponent);

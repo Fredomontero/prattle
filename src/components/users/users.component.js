@@ -10,7 +10,7 @@ class UsersComponent extends Component{
         console.log("This is the Users Component");
 
         this.state = {
-            patter: ""
+            pattern: ""
         }
         this.patternRef = React.createRef();
     }
@@ -25,10 +25,11 @@ class UsersComponent extends Component{
         retrieveUsers(pattern);
     }
 
-    addcontactHandler = (id) => {
+    addcontactHandler = (id, fullname) => {
         const { addContact } = this.props;
-        console.log("The sourceId is:" + this.props.currentuserId + " and the targetId is: " + id);
-        addContact(this.props.currentuserId, id);
+        console.log("Current user data: ", this.props.currentuser._id + " " + this.props.currentuser.firstname + " " + this.props.currentuser.lastname);
+        console.log("Target User: ", id + " " + fullname  )
+        addContact(this.props.currentuser._id, this.props.currentuser.firstname + " " + this.props.currentuser.lastname, id, fullname);
     }
 
     
@@ -48,7 +49,7 @@ class UsersComponent extends Component{
                                     <img className="profile-picture" src="https://cdn3.iconfinder.com/data/icons/rcons-user-action/32/boy-512.png" alt="user_icon"/>
                                     <h3>{user.firstname + " " + user.lastname}</h3>
                                     <h3>{user.email}</h3>
-                                    <input className="add-buton" type="button" value="Add" onClick={ () => this.addcontactHandler(user._id) }/>
+                                    <input className="add-buton" type="button" value="Add" onClick={ () => this.addcontactHandler(user._id, user.firstname + " " + user.lastname) }/>
                                 </div>
                             )
                         })
@@ -63,15 +64,15 @@ class UsersComponent extends Component{
 function mapStateToProps(state){
     const { tempData, loggedIn } = state;
     if(tempData && loggedIn)
-        console.log("tempData: ", tempData, "Current user id: ", loggedIn._id);
+        console.log("tempData: ", tempData, "Current user is: ", loggedIn);
     return { 
         tempData: (tempData) ? tempData : null,
-        currentuserId: (loggedIn) ? loggedIn._id : null 
+        currentuser: (loggedIn) ? loggedIn : null 
     }
   }
 
 const mapDispatchToProps = dispatch => ({
-    addContact: (sourceId, targetId) => dispatch(addContact({sourceId, targetId})),
+    addContact: (sourceId, sourceName, targetId, targetName) => dispatch(addContact({sourceId, sourceName, targetId, targetName,})),
     retrieveUsers: (pattern) => dispatch(retrieveUsers({pattern}))
     
 })
