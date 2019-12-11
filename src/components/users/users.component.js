@@ -26,8 +26,9 @@ class UsersComponent extends Component{
     }
 
     addcontactHandler = (id) => {
-        // console.log("The id is: ", id);
-        addContact(id);
+        const { addContact } = this.props;
+        console.log("The sourceId is:" + this.props.currentuserId + " and the targetId is: " + id);
+        addContact(this.props.currentuserId, id);
     }
 
     
@@ -60,15 +61,19 @@ class UsersComponent extends Component{
 }
 
 function mapStateToProps(state){
-    const { tempData } = state;
-    if(tempData)
-        console.log("tempData: ", tempData);
-    return { tempData: (tempData) ? tempData : null }
+    const { tempData, loggedIn } = state;
+    if(tempData && loggedIn)
+        console.log("tempData: ", tempData, "Current user id: ", loggedIn._id);
+    return { 
+        tempData: (tempData) ? tempData : null,
+        currentuserId: (loggedIn) ? loggedIn._id : null 
+    }
   }
 
 const mapDispatchToProps = dispatch => ({
-    retrieveUsers: (pattern) => dispatch(retrieveUsers({pattern})),
-    addContact: (userId) => dispatch(addContact({userId}))
+    addContact: (sourceId, targetId) => dispatch(addContact({sourceId, targetId})),
+    retrieveUsers: (pattern) => dispatch(retrieveUsers({pattern}))
+    
 })
 
 export default connect(mapStateToProps, mapDispatchToProps)(UsersComponent);

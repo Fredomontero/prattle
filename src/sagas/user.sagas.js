@@ -12,7 +12,10 @@ import {
     loadProfileSuccess,
     retrieveUsersSuccess,
     retrieveUsersFailure,
-    addContact
+    addContact,
+    addContactSuccess,
+    addContactFailure
+
 
 } from "../redux/actions/user.actions";
 
@@ -227,6 +230,15 @@ export function* loadProfile(action){
                     firstname
                     lastname
                     email
+                    contacts
+                    requests{
+                        sourceId
+                        targetId
+                    }
+                    pendingRequests{
+                        sourceId
+                        targetId
+                    }
                 }
             }
         `
@@ -306,16 +318,64 @@ export function* onRetrieveUsers(){
     yield takeEvery("RETRIEVE_USERS", retrieveUsers)
 }
 
-export function* addContactRquest(action){
-    return null
+export function* addContactRequest(action){
+    console.log("Inside addContactRequest Saga")
+    let addContactBody = {
+        query: `
+            mutation{
+                addContact(RequestInput: {
+                    sourceId: "${action.payload.sourceId}",
+                    targetId: "${action.payload.targetId}"
+                }){
+                    _id
+                    firstname
+                    lastname
+                    email
+                    contacts
+                    requests{
+                        sourceId
+                        targetId
+                    }
+                    pendingRequests{
+                        sourceId
+                        targetId
+                    }
+                }
+            }
+        `
+    }
+
+    let addContactOptions = {
+        method: 'POST',
+        body: JSON.stringify(addContactBody),
+        credentials: "include",
+        headers: {
+            'Content-Type': 'application/json'
+        }
+    };
+
+    try{
+        let res = yield call(fetch, 'http://localhost:4001/graphql', addContactOptions);
+        let resData = yield res.json();
+        console.log(resData);
+        if(resData.errors){
+            yield put(addContactFailure(resData.errors[0].message));
+        }else{
+            yield put(
+                addContactSuccess(resData.data.addContact)
+            )
+        }
+    }catch(error){
+        yield put(addContactFailure(error));   
+    }
 }
 
 export function* onAddContactRequest(){
-    yield takeEvery("SEND_CONTACT_REQUEST", addContactRquest)
+    yield takeEvery("SEND_CONTACT_REQUEST", addContactRequest)
 }
 
 //----------------------------------------------------------------
 
 export function* userSagas(){
-    yield all([call(onSignIn), call(onCreateUser), call(getUser), call(onLogout), call(onLoadProfile), call(onRetrieveUsers)]);
+    yield all([call(onSignIn), call(onCreateUser), call(getUser), call(onLogout), call(onLoadProfile), call(onRetrieveUsers), call(onAddContactRequest)]);
 }

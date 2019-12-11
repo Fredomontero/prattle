@@ -86,8 +86,18 @@ export const retrieveUsersFailure = error => ({
     payload: error
 });
 
-export const addContact = user => ({
+export const addContact = data => ({
     type: "SEND_CONTACT_REQUEST",
+    payload: data
+});
+
+export const addContactSuccess = user => ({
+    type: "ADD_CONTACT_SUCCESS",
     payload: user
+});
+
+export const addContactFailure = error => ({
+    type: "ADD_CONTACT_FAILURE",
+    payload: error
 });
 

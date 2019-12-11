@@ -5,7 +5,8 @@ import './dashboard-page.css';
 import ChatsComponent from "../../components/chats/chats.component";
 import SettingsComponent from "../../components/settings/settings.component";
 import UsersComponent from "../../components/users/users.component";
-import { MdChatBubble, MdPersonAdd, MdSettings, MdPowerSettingsNew } from "react-icons/md";
+import NotificationsComponent from "../../components/notifications/notifications.component";
+import { MdChatBubble, MdPersonAdd, MdSettings, MdPowerSettingsNew, MdNotifications } from "react-icons/md";
 
 
 class DashboardPage extends Component{
@@ -38,6 +39,7 @@ class DashboardPage extends Component{
                 <div className="dashboard-container">
                 <div className="sidebar">
                     <ul>
+                        <li onClick={ () => this.setState({section: "notifications"}) } ><MdNotifications/></li>
                         <li onClick={ () => this.setState({section: "chats"}) } ><MdChatBubble/></li>
                         <li onClick={ () => this.setState({section: "users"}) } ><MdPersonAdd/></li>
                         <li onClick={ () => this.setState({section: "settings"}) } ><MdSettings/></li>
@@ -51,7 +53,12 @@ class DashboardPage extends Component{
                         (this.state.section === "users") ? (
                             <UsersComponent/>
                         ) : (
-                            <SettingsComponent/>
+                            (this.state.section === "settings") ? (
+                                <SettingsComponent/>
+                            ) : (
+                                <NotificationsComponent/>
+                            )
+                            
                         )
                     )
                     }
