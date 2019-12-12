@@ -230,7 +230,12 @@ export function* loadProfile(action){
                     firstname
                     lastname
                     email
-                    contacts
+                    contacts{
+                        _id
+                        firstname
+                        lastname
+                        email
+                    }
                     requests{
                         requestId
                         sourceId
