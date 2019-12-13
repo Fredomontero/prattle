@@ -1,6 +1,8 @@
 import React, {Component} from "react"
 import { connect } from "react-redux";
 
+import "./chats.component.css";
+
 class ChatsComponent extends Component{
     constructor(props){
         super(props);
@@ -15,7 +17,7 @@ class ChatsComponent extends Component{
     
     render(){
         return(
-            <div>
+            <div className="chat-component-container">
                 <div className="my-contacts">
                     <h3>My Contacts</h3>
                     {
@@ -25,14 +27,23 @@ class ChatsComponent extends Component{
                             this.props.currentuser.contacts.map( contact => {
                                 return(
                                     <div key={contact._id} className="contact-container">
-                                        <h4>{contact.firstname + " " + contact.lastname}</h4>
-                                        <h4>{contact.email}</h4>
+                                        <h5>{contact.firstname + " " + contact.lastname}</h5>
+                                        <h5>{contact.email}</h5>
                                     </div>
                                 )
                             })
                         )
                     }
                 </div>
+                <div className="chat-component">
+                        <div className="chat-content">
+                            
+                        </div>
+                        <div className="input-container">
+                            <input className="message-input" type="text"/>
+                            <input className="button-input" type="button" value="send"/>
+                        </div>
+                    </div>
             </div>
         )
     }
