@@ -1,66 +1,48 @@
 .chat-component-container{
-    display: inline-block;
-    width: 100%;
-    box-sizing: content-box;
+    background-color: antiquewhite;
+    border: 1px solid blue;
+    display: flex;
+    width: calc(100% - 80px);
+    box-sizing: border-box;
+    flex-direction: row;
+    height: calc(100% - 108px);
 }
 
 .my-contacts{
-    border: 1px solid #eaeef0;
-    height: 100%;
-    position: fixed;
+    border: 1px solid red;
+    flex-grow: 1;
     text-align: center;
-    border-collapse: collapse;
-    display: inline-block;
 }
 
 .contact-container{
-    border: 1px solid #eaeef0;
-    text-align: left;
-    padding: 0 15px;
-    cursor: pointer;
-    border-collapse: collapse;
+    border: 1px solid black;
+    padding: 0 10px;
 }
 
 .contact-container h5{
-    margin: 7px 0;
+    margin: 10px;
 }
 
 .chat-component{
-    display: block;
-    margin-left: 150px;
-    background-color: #e6e8fa;
-    width: 100%;
-    box-sizing: border-box;
-    position: fixed;
-    height: 100%;
+    border: 1px solid green;
+    flex-grow: 11;
+    display: flex;
+    flex-direction: column;
 }
 
 .chat-content{
-    margin: 10px;
-    width: 77%;
-    height: 70%;
-    background-color: #fff;
-    display: block !important;
+   flex-grow: 11;
+   background-color: floralwhite;
 }
 
 .input-container{
-    display: block !important;
-    margin: 10px;
-    height: 11%;
+    flex-grow: 1;
 }
 
 .input-container .message-input{
-    margin: 5px;
-    height: 90%;
-    width: 70%;
-    box-sizing: border-box;
-    display: inline-block;
+ 
 }
 
 .input-container .button-input{
-    width: 8%;
-    display: inline-block;
-    background-color:#0d98ba;
-    color: #fff;
-    padding: 29px;
+
 }
