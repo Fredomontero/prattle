@@ -37,10 +37,11 @@
 
 .input-container{
     flex-grow: 1;
+    display: flex;
 }
 
 .input-container .message-input{
- 
+ flex-grow: 1;
 }
 
 .input-container .button-input{
