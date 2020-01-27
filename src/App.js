@@ -10,6 +10,7 @@ import DashboardPage from './pages/dashboard/dashboard-page';
 
 import './App.css';
 
+
 class App extends Component{
   constructor(props){
     super(props);
@@ -20,6 +21,7 @@ class App extends Component{
     console.log("LoggedIn: ", this.props.loggedIn);
     const { getUser } = this.props;
     getUser();
+    
 
   }
 

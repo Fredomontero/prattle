@@ -7,12 +7,17 @@ class ChatsComponent extends Component{
     constructor(props){
         super(props);
         console.log("This is the Chats Component");
+        this.messageRef = React.createRef();
     }
 
     componentDidMount(){
         const { currentuser } = this.props;
         console.log("Inside Component Did Mount");
         console.log("The currentUser is: ", currentuser);
+    }
+
+    sendMessage = () =>{
+        console.log("The message is: ", this.messageRef.current.value);
     }
     
     render(){
@@ -40,8 +45,8 @@ class ChatsComponent extends Component{
                         
                     </div>
                     <div className="input-container">
-                        <input className="message-input" type="text"/>
-                        <input className="button-input" type="button" value="send"/>
+                        <input className="message-input" type="text" ref={ this.messageRef }/>
+                        <input className="button-input" type="button" value="send" onClick={ this.sendMessage }/>
                     </div>
                 </div>
             </div>

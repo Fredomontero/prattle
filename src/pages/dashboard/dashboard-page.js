@@ -7,6 +7,7 @@ import SettingsComponent from "../../components/settings/settings.component";
 import UsersComponent from "../../components/users/users.component";
 import NotificationsComponent from "../../components/notifications/notifications.component";
 import { MdChatBubble, MdPersonAdd, MdSettings, MdPowerSettingsNew, MdNotifications } from "react-icons/md";
+import io from 'socket.io-client';
 
 
 class DashboardPage extends Component{
@@ -19,6 +20,7 @@ class DashboardPage extends Component{
     }
 
     componentDidMount(){
+        this.socket = io('http://localhost:4001');
         const { loadProfile } = this.props;
         loadProfile(this.props.loggedIn.userId);
     }
