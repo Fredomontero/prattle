@@ -1,8 +1,8 @@
 import React, { Component } from 'react';
 import { connect } from "react-redux";
-import { logout, loadProfile } from "../../redux/actions/user.actions";
+import { logout, loadProfile, loadSocket } from "../../redux/actions/user.actions";
 import './dashboard-page.css';
-import ChatsComponent from "../../components/chats/chats.component";
+import ChatComponent from "../../components/chat/chat.component";
 import SettingsComponent from "../../components/settings/settings.component";
 import UsersComponent from "../../components/users/users.component";
 import NotificationsComponent from "../../components/notifications/notifications.component";
@@ -20,9 +20,10 @@ class DashboardPage extends Component{
     }
 
     componentDidMount(){
-        this.socket = io('http://localhost:4001');
-        const { loadProfile } = this.props;
+        const { loadProfile, loadSocket } = this.props;
         loadProfile(this.props.loggedIn.userId);
+        loadSocket();
+        // this.socket = io('http://localhost:4001');
     }
 
     submitHandler = () => {
@@ -50,7 +51,7 @@ class DashboardPage extends Component{
                 </div>
                 <div className="dashboard-body">
                     {   (this.state.section === "chats") ? (
-                        <ChatsComponent/>
+                        <ChatComponent/>
                     ):(
                         (this.state.section === "users") ? (
                             <UsersComponent/>
@@ -73,7 +74,8 @@ class DashboardPage extends Component{
 
 const mapDispatchToProps = dispatch => ({
     logout: () => dispatch(logout()),
-    loadProfile:(userId) => dispatch(loadProfile(userId))
+    loadProfile:(userId) => dispatch(loadProfile(userId)),
+    loadSocket: () => dispatch(loadSocket())
 })
 
 const mapStateToProps =(state) => {

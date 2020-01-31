@@ -12,7 +12,7 @@ import {
     loadProfileSuccess,
     retrieveUsersSuccess,
     retrieveUsersFailure,
-    addContact,
+    // addContact,
     addContactSuccess,
     addContactFailure,
     handleRequestSuccess,
@@ -457,7 +457,8 @@ export function* resolveFriendshipRequest(action){
 
 export function* onHandleRequest(){
     yield takeEvery("HANDLE_FRIENDSHIP_REQUEST", resolveFriendshipRequest)
-} 
+}
+
 
 //----------------------------------------------------------------
 
