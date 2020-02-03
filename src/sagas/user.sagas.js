@@ -65,6 +65,7 @@ export function* onSignIn(){
 
 export function* createUser(action){
 
+    //Sending data to the Auth server
     let requestBodyAuth = {
         query: `
             mutation{
@@ -98,12 +99,11 @@ export function* createUser(action){
                     mutation{
                         createUser(userInput: {
                             _id: "${tempId}"
-                            firstname: "${action.payload.firstname}",
-                            lastname: "${action.payload.lastname}",
+                            fullname: "${action.payload.fullname}",
                             email: "${action.payload.email}"
                         }){
                             _id
-                            firstname
+                            fullname
                             email
                         }
                     }
@@ -227,13 +227,11 @@ export function* loadProfile(action){
             query {
                 loadProfile(userId: "${userId}"){
                     _id
-                    firstname
-                    lastname
+                    fullname
                     email
                     contacts{
                         _id
-                        firstname
-                        lastname
+                        fullname
                         email
                     }
                     requests{
@@ -292,8 +290,7 @@ export function* retrieveUsers(action){
             query {
                 retrieveUsers(pattern: "${pattern}"){
                     _id
-                    firstname
-                    lastname
+                    fullname
                     email
                 }
             }
@@ -341,8 +338,7 @@ export function* addContactRequest(action){
                     targetName: "${action.payload.targetName}"
                 }){
                     _id
-                    firstname
-                    lastname
+                    fullname
                     email
                     contacts
                     requests{
@@ -407,8 +403,7 @@ export function* resolveFriendshipRequest(action){
                     targetId: "${action.payload.targetId}"
                 }){
                     _id
-                    firstname
-                    lastname
+                    fullname
                     email
                     contacts
                     requests{

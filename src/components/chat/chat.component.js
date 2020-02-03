@@ -21,7 +21,7 @@ class ChatComponent extends Component{
         const { sendMessage, currentuser } = this.props;
         var text = this.messageRef.current.value;
         var date = new Date(Date.now()).toLocaleString();
-        var author = currentuser.firstname + " " + currentuser.lastname;
+        var author = currentuser.fullname;
         console.log("The message is: ", { text, author  , date });
         sendMessage( text, author  , date );
     }
@@ -38,7 +38,7 @@ class ChatComponent extends Component{
                                 this.props.currentuser.contacts.map( contact => {
                                     return(
                                         <div key={contact._id} className="contact-container">
-                                            <h5>{contact.firstname + " " + contact.lastname}</h5>
+                                            <h5>{contact.fullname}</h5>
                                             <h5>{contact.email}</h5>
                                         </div>
                                     )

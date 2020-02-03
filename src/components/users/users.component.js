@@ -27,9 +27,9 @@ class UsersComponent extends Component{
 
     addcontactHandler = (id, fullname) => {
         const { addContact } = this.props;
-        console.log("Current user data: ", this.props.currentuser._id + " " + this.props.currentuser.firstname + " " + this.props.currentuser.lastname);
+        console.log("Current user data: ", this.props.currentuser._id + " " + this.props.currentuser.fullname);
         console.log("Target User: ", id + " " + fullname  )
-        addContact(this.props.currentuser._id, this.props.currentuser.firstname + " " + this.props.currentuser.lastname, id, fullname);
+        addContact(this.props.currentuser._id, this.props.currentuser.fullname, id, fullname);
     }
 
     
@@ -47,9 +47,9 @@ class UsersComponent extends Component{
                             return(
                                 <div key={user._id} className="user-card">
                                     <img className="profile-picture" src="https://cdn3.iconfinder.com/data/icons/rcons-user-action/32/boy-512.png" alt="user_icon"/>
-                                    <h3>{user.firstname + " " + user.lastname}</h3>
+                                    <h3>{user.fullname}</h3>
                                     <h3>{user.email}</h3>
-                                    <input className="add-buton" type="button" value="Add" onClick={ () => this.addcontactHandler(user._id, user.firstname + " " + user.lastname) }/>
+                                    <input className="add-buton" type="button" value="Add" onClick={ () => this.addcontactHandler(user._id, user.fullname) }/>
                                 </div>
                             )
                         })

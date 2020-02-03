@@ -37,7 +37,7 @@ class DashboardPage extends Component{
                 {/* NAVBAR */}
                 <div className="navbar">
                     <h1>Dashboard  &#128021;</h1>
-                    <h3 className="welcome">Welcome { this.props.loggedIn.firstname }</h3>
+                    <h3 className="welcome">Welcome { this.props.loggedIn.fullname }</h3>
                 </div>
                 <div className="dashboard-container">
                 <div className="sidebar">
