@@ -116,6 +116,7 @@ export const handleRequestFailure = error => ({
     payload: error
 });
 
-export const loadSocket =  () => ({
-    type: "LOAD_SOCKET"
+export const loadSocket =  fullname => ({
+    type: "LOAD_SOCKET",
+    payload: fullname
 });

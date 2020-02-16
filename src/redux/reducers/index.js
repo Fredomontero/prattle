@@ -74,11 +74,21 @@ function rootReducer(state = initialState, action){
                 error: action.payload
             }
         case "HANDLE_FRIENDSHIP_REQUEST_SUCCESS":
-        return{
-            ...state,
-            loggedIn: action.payload
-        }
+            return{
+                ...state,
+                loggedIn: action.payload
+            }
         case "HANDLE_FRIENDSHIP_REQUEST_FAILURE":
+            return{
+                ...state,
+                error: action.payload
+            }
+        case "LOAD_MESSAGES_SUCCESS":
+            return{
+                ...state,
+                tempData: action.payload
+            }
+        case "LOAD_MESSAGES_FAILURE":
             return{
                 ...state,
                 error: action.payload

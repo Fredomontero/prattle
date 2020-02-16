@@ -14,14 +14,21 @@
     text-align: center;
 }
 
-.contact-container{
+.conversation-container{
     border: 1px solid black;
     padding: 0 10px;
+    cursor: pointer;
 }
 
-.contact-container h5{
+.conversation-container h5{
+    margin: 10px;
+    color: #666666;
+}
+
+.conversation-container h4{
     margin: 10px;
 }
+
 
 .chat-component{
     border: 1px solid green;
@@ -44,6 +51,10 @@
  flex-grow: 1;
 }
 
-.input-container .button-input{
-
+.message-icon{
+    width: 500px;
+    height: 400px;
+    opacity: 0.3;
+    margin-left: calc(50% - 250px);
+    margin-top: calc(15%);
 }

@@ -14,7 +14,7 @@ class LoginPage extends Component {
     }
 
     componentDidMount(){
-        console.log("On loginPage");
+        // console.log("On loginPage");
     }
 
     submitHandler = (event) => {

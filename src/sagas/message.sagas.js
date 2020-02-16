@@ -1,4 +1,4 @@
-import { takeEvery, put, all, call} from "redux-saga/effects";
+import { takeEvery, all, call} from "redux-saga/effects";
 import io from 'socket.io-client';
 const url = 'http://localhost:4001';
 
@@ -24,7 +24,8 @@ export function* sendMessage(message){
     console.log("*************************");
     console.log("The message is: ", message.payload);
     console.log("*************************");
-    socket.emit('newMessage', message.payload);
+    var result = yield socket.emit('newMessage', message.payload);
+    console.log("The message in return is: ", result);
     
 }
 

@@ -12,13 +12,10 @@ import './App.css';
 
 
 class App extends Component{
-  constructor(props){
-    super(props);
-  }
 
   componentDidMount(){
-    console.log("Que pedo we apenas me voy a renderear [App Component]");
-    console.log("LoggedIn: ", this.props.loggedIn);
+    // console.log("Que pedo we apenas me voy a renderear [App Component]");
+    // console.log("LoggedIn: ", this.props.loggedIn);
     const { getUser } = this.props;
     getUser();
     
@@ -73,8 +70,8 @@ class App extends Component{
 
 function mapStateToProps(state){
   const { loggedIn } = state;
-  if(loggedIn)
-    console.log("Logged in: ", loggedIn.userId);
+  // if(loggedIn)
+  //   console.log("Logged in: ", loggedIn.userId);
   return { loggedIn: (loggedIn) ? loggedIn.userId : null }
 }
 

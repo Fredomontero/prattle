@@ -7,7 +7,7 @@ import "./users.component.css";
 class UsersComponent extends Component{
     constructor(props){
         super(props);
-        console.log("This is the Users Component");
+        // console.log("This is the Users Component");
 
         this.state = {
             pattern: ""
@@ -16,7 +16,7 @@ class UsersComponent extends Component{
     }
 
     componentDidMount(){
-        console.log("The tempData is: ", this.props.tempData);
+        // console.log("The tempData is: ", this.props.tempData);
       }
 
     submitHandler = () => {
@@ -34,6 +34,7 @@ class UsersComponent extends Component{
 
     
     render(){
+        let { currentuser } = this.props;
         return(
             <div>
                 <input type="text" id="pattern" placeholder="Search users" ref={this.patternRef}/>
@@ -43,7 +44,8 @@ class UsersComponent extends Component{
                     (!this.props.tempData)?(
                         <h2>There are no contacts...</h2>
                     ):(
-                        this.props.tempData.map(user => {
+                        this.props.tempData.filter( user => user._id !== currentuser._id && !currentuser.contacts.includes(user.fullname) )
+                        .map(user => {
                             return(
                                 <div key={user._id} className="user-card">
                                     <img className="profile-picture" src="https://cdn3.iconfinder.com/data/icons/rcons-user-action/32/boy-512.png" alt="user_icon"/>
@@ -63,8 +65,8 @@ class UsersComponent extends Component{
 
 function mapStateToProps(state){
     const { tempData, loggedIn } = state;
-    if(tempData && loggedIn)
-        console.log("tempData: ", tempData, "Current user is: ", loggedIn);
+    // if(tempData && loggedIn)
+    //     console.log("tempData: ", tempData, "Current user is: ", loggedIn);
     return { 
         tempData: (tempData) ? tempData : null,
         currentuser: (loggedIn) ? loggedIn : null 

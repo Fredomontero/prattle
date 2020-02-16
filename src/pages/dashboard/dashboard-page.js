@@ -1,28 +1,29 @@
 import React, { Component } from 'react';
 import { connect } from "react-redux";
-import { logout, loadProfile, loadSocket } from "../../redux/actions/user.actions";
+import { logout, loadProfile } from "../../redux/actions/user.actions";
 import './dashboard-page.css';
 import ChatComponent from "../../components/chat/chat.component";
 import SettingsComponent from "../../components/settings/settings.component";
 import UsersComponent from "../../components/users/users.component";
 import NotificationsComponent from "../../components/notifications/notifications.component";
 import { MdChatBubble, MdPersonAdd, MdSettings, MdPowerSettingsNew, MdNotifications } from "react-icons/md";
-import io from 'socket.io-client';
 
 
 class DashboardPage extends Component{
     constructor(props){
         super(props);
-        console.log("Dashboard Component");
+        // console.log("Dashboard Component");
         this.state = {
             section: "chats"
         }
     }
 
     componentDidMount(){
-        const { loadProfile, loadSocket } = this.props;
+        const { loadProfile } = this.props;
         loadProfile(this.props.loggedIn.userId);
-        loadSocket();
+        // console.log(this.props.loggedIn);
+        // console.log("The fullname before loading socket is: ", this.props.loggedIn.fullname);
+        // loadSocket(this.props.loggedIn.fullname);
         // this.socket = io('http://localhost:4001');
     }
 
@@ -36,7 +37,7 @@ class DashboardPage extends Component{
             <div>
                 {/* NAVBAR */}
                 <div className="navbar">
-                    <h1>Dashboard  &#128021;</h1>
+                    <h1>Dashboard  <span role="img" aria-label="doggie">&#128021;</span></h1>
                     <h3 className="welcome">Welcome { this.props.loggedIn.fullname }</h3>
                 </div>
                 <div className="dashboard-container">
@@ -74,8 +75,7 @@ class DashboardPage extends Component{
 
 const mapDispatchToProps = dispatch => ({
     logout: () => dispatch(logout()),
-    loadProfile:(userId) => dispatch(loadProfile(userId)),
-    loadSocket: () => dispatch(loadSocket())
+    loadProfile:(userId) => dispatch(loadProfile(userId))
 })
 
 const mapStateToProps =(state) => {

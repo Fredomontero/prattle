@@ -12,12 +12,17 @@ import {
     loadProfileSuccess,
     retrieveUsersSuccess,
     retrieveUsersFailure,
-    // addContact,
     addContactSuccess,
     addContactFailure,
     handleRequestSuccess,
-    handleRequestFailure
+    handleRequestFailure,
+    loadSocket,
 } from "../redux/actions/user.actions";
+
+import {
+    loadMessagesSuccess,
+    loadMessagesFailure
+} from "../redux/actions/message.actions";
 
 
 export function* loginWithEmail(action){
@@ -46,7 +51,7 @@ export function* loginWithEmail(action){
     try{
         let res = yield call(fetch, 'http://localhost:4000/graphql', loginRequestOptions);
         let resData = yield res.json();
-        console.log("ResData: ", resData);
+        // console.log("ResData: ", resData);
         if(resData.errors){
             yield put(loginFailure(resData.errors[0].message));
         }else{
@@ -161,7 +166,7 @@ export function* fetchUser(){
     try{
         let res = yield call(fetch, 'http://localhost:4000/graphql', fetchUserRequestOptions);
         let resData = yield res.json();
-        console.log("gotUser? : ", resData);
+        // console.log("gotUser? : ", resData);
         if(resData.errors){
             yield put(fetchUserFailure(resData.errors[0].message));
         }else{
@@ -248,6 +253,12 @@ export function* loadProfile(action){
                         targetId
                         targetName
                     }
+                    conversations{
+                        _id
+                        participants
+                        createdAt
+                        lastMessageAt
+                    }
                 }
             }
         `
@@ -265,10 +276,12 @@ export function* loadProfile(action){
     try{
         let res = yield call(fetch, 'http://localhost:4001/graphql', loadProfileOptions);
         let userData = yield res.json();
-        console.log("userData: ", userData);
         if(userData.errors){
             yield put(loadProfileFailure(userData.errors[0].message));
         }else{
+            yield put(
+                loadSocket(userData.data.loadProfile)
+            )
             yield put(
                 loadProfileSuccess(userData.data.loadProfile)
             )
@@ -278,7 +291,7 @@ export function* loadProfile(action){
     }
 }
 
-export function* onLoadProfile(){
+export function* onLoadProfile(){""
     yield takeEvery("LOAD_PROFILE", loadProfile)
 }
 
@@ -309,7 +322,7 @@ export function* retrieveUsers(action){
     try{
         let res = yield call(fetch, 'http://localhost:4001/graphql', retrieveUsersOptions);
         let usersData = yield res.json();
-        console.log("usersData: ", usersData);
+        // console.log("usersData: ", usersData);
         if(usersData.errors){
             yield put(retrieveUsersFailure(usersData.errors[0].message));
         }else{
@@ -355,6 +368,7 @@ export function* addContactRequest(action){
                         targetId
                         targetName
                     }
+                    conversations
                 }
             }
         `
@@ -390,9 +404,6 @@ export function* onAddContactRequest(){
 }
 
 export function* resolveFriendshipRequest(action){
-    console.log("Inside resolveFriendshipRequest Saga");
-    // console.log("Action -> Payload");
-    // console.log(typeof action.payload.value);
     let handleFriendshipRequestBody = {
         query: `
             mutation{
@@ -420,6 +431,7 @@ export function* resolveFriendshipRequest(action){
                         targetId
                         targetName
                     }
+                    conversations
                 }
             }
         `
@@ -437,7 +449,7 @@ export function* resolveFriendshipRequest(action){
     try{
         let res = yield call(fetch, 'http://localhost:4001/graphql', handleFriendshipRequestOptions);
         let resData = yield res.json();
-        console.log(resData);
+        // console.log(resData);
         if(resData.errors){
             yield put(handleRequestFailure(resData.errors[0].message));
         }else{
@@ -454,6 +466,48 @@ export function* onHandleRequest(){
     yield takeEvery("HANDLE_FRIENDSHIP_REQUEST", resolveFriendshipRequest)
 }
 
+export function* loadMessagesRequest(action){
+    let loadMessagesBody = {
+        query: `
+            query {
+                loadMessages(conversationId: "${action.payload.conversationId}"){
+                    _id
+                    conversationId
+                    author
+                    createdAt
+                    text
+                }
+            }
+        `
+    };
+
+    let loadMessagesOptions = {
+        method: 'POST',
+        body: JSON.stringify(loadMessagesBody),
+        credentials: "include",
+        headers: {
+            'Content-Type': 'application/json'
+        }
+    };
+
+    try{
+        let res = yield call(fetch, 'http://localhost:4002/graphql', loadMessagesOptions);
+        let messages = yield res.json();
+        if(messages.errors){
+            yield put(loadMessagesFailure(messages.errors[0].message));
+        }else{
+            yield put(
+                loadMessagesSuccess(messages.data.loadMessages)
+            )
+        }
+    }catch(error){
+        yield put(loadMessagesFailure(error));
+    }
+}
+
+export function* onLoadMessages(){
+    yield takeEvery("LOAD_MESSAGES", loadMessagesRequest)
+}
 
 //---------------------------------------------------------------
 
@@ -465,6 +519,7 @@ export function* userSagas(){
                call(onLoadProfile), 
                call(onRetrieveUsers), 
                call(onAddContactRequest),
-               call(onHandleRequest)
+               call(onHandleRequest),
+               call(onLoadMessages)
             ]);
 }

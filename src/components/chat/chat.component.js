@@ -1,20 +1,14 @@
 import React, {Component} from "react"
 import { connect } from "react-redux";
-import { sendMessage } from "../../redux/actions/message.actions";
+import { sendMessage, loadMessages } from "../../redux/actions/message.actions";
 
 import "./chat.component.css";
 
 class ChatComponent extends Component{
     constructor(props){
         super(props);
-        console.log("This is the Chats Component");
         this.messageRef = React.createRef();
-    }
-
-    componentDidMount(){
-        const { currentuser } = this.props;
-        console.log("Inside Component Did Mount");
-        console.log("The currentUser is: ", currentuser);
+        this.state = { chatId: null };
     }
 
     handleMessage = () => {
@@ -22,24 +16,37 @@ class ChatComponent extends Component{
         var text = this.messageRef.current.value;
         var date = new Date(Date.now()).toLocaleString();
         var author = currentuser.fullname;
-        console.log("The message is: ", { text, author  , date });
-        sendMessage( text, author  , date );
+        // console.log("The message is: ", { text, author  , date });
+        sendMessage( author, text, date );
+    }
+
+    getUser = (conversation) => {
+        let { currentuser } = this.props;
+        let contactId = conversation.participants.filter( participant => participant !== currentuser._id ).map( participant => participant )[0];
+        let myContact = currentuser.contacts.filter( contact => contact._id === contactId ).map( contact => contact )[0];
+        return myContact;
+    }
+
+    selectConversation = (id) => {
+        const { loadMessages } = this.props;
+        this.setState({chatId: id});
+        loadMessages(id);
     }
     
     render(){
         return(
             <div className="chat-component-container">
                 <div className="my-contacts">
-                    <h3>My Contacts</h3>
+                    <h3>My Conversations</h3>
                         {
-                            ((!this.props.currentuser.contacts) || (this.props.currentuser.contacts.length === 0)) ? (
-                                <h4>You don't have any contacts</h4> 
+                            ((!this.props.currentuser.conversations) || (this.props.currentuser.conversations.length === 0)) ? (
+                                <h4>You don't have any conversations</h4> 
                             ):(
-                                this.props.currentuser.contacts.map( contact => {
+                                this.props.currentuser.conversations.map( conversation => {
                                     return(
-                                        <div key={contact._id} className="contact-container">
-                                            <h5>{contact.fullname}</h5>
-                                            <h5>{contact.email}</h5>
+                                        <div key={conversation._id} className="conversation-container" onClick={() => this.selectConversation(conversation._id)}>
+                                            <h4>{this.getUser(conversation).fullname}</h4> 
+                                            <h5>{conversation.createdAt}</h5> 
                                         </div>
                                     )
                                 })
@@ -48,11 +55,13 @@ class ChatComponent extends Component{
                 </div>
                 <div className="chat-component">
                     <div className="chat-content">
-                        
+                    {
+                        (this.state.chatId === null)?( <img className="message-icon" src={require("../../assets/images/messages-icon.png")} alt="messages-icon"/>):(<h2>Messages</h2>)
+                    }
                     </div>
                     <div className="input-container">
                         <input className="message-input" type="text" ref={ this.messageRef }/>
-                        <input className="button-input" type="button" value="send" onClick={ this.handleMessage }/>
+                        <input className="button-input" type="button" value="send" onClick={this.handleMessage}/>
                     </div>
                 </div>
             </div>
@@ -62,15 +71,14 @@ class ChatComponent extends Component{
 
 function mapStateToProps(state){
     const { loggedIn } = state;
-    if(loggedIn)
-        console.log("Current user is: ", loggedIn);
     return { 
         currentuser: (loggedIn) ? loggedIn : null 
     }
 }
 
 const mapDispatchToProps = dispatch => ({
-    sendMessage: (author, text, date) => dispatch(sendMessage({ author, text, date }))
+    sendMessage: (author, text, date) => dispatch(sendMessage({ author, text, date })),
+    loadMessages: (conversationId) => dispatch(loadMessages({conversationId}))
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(ChatComponent);
