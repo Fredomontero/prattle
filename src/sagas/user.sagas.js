@@ -21,8 +21,13 @@ import {
 
 import {
     loadMessagesSuccess,
-    loadMessagesFailure
+    loadMessagesFailure,
+    updateMessages,
+    saveMessageSuccess,
+    saveMessageFailure
 } from "../redux/actions/message.actions";
+
+import { getChatId } from '../selectors/selectors';
 
 
 export function* loginWithEmail(action){
@@ -509,6 +514,63 @@ export function* onLoadMessages(){
     yield takeEvery("LOAD_MESSAGES", loadMessagesRequest)
 }
 
+export function* saveMessage(action){
+
+    //Sending data to the Auth server
+    let saveMessageBody = {
+        query: `
+            mutation{
+                saveMessage({
+                    conversationId: "${action.payload.conversationId}",
+                    author: "${action.payload.author}",
+                    createdAt: "${action.payload.date}",
+                    text: "${action.payload.text}",
+                }){
+                    _id
+                    conversationId
+                    author
+                    createdAt
+                    text
+                }
+            }
+        `
+    }
+
+    let saveMessageOptions = {
+        method: 'POST',
+        body: JSON.stringify(saveMessageBody),
+        headers: {
+            'Content-Type': 'application/json'
+        }
+    }
+    try{
+        let res = yield call(fetch, 'http://localhost:4002/graphql', saveMessageOptions);
+        let message = yield res.json();
+        console.log("The result in Message is: ", message);
+        if(message.errors){
+            yield put(saveMessageFailure(message.errors[0].message));
+        }else{
+            if( getChatId === message.data.saveMessage.conversationId ){
+                yield put(
+                    updateMessages(message.data.saveMessage)
+                )
+            }else{
+                yield put(
+                    saveMessageSuccess(message.data.saveMessage)
+                )
+            }
+        }
+    }catch(error){
+        yield put(failToCreateUser(error));   
+    }
+    
+
+}
+
+export function* onSaveMessage(){
+    yield takeEvery("SAVE_MESSAGE", saveMessage)
+}
+
 //---------------------------------------------------------------
 
 export function* userSagas(){
@@ -520,6 +582,7 @@ export function* userSagas(){
                call(onRetrieveUsers), 
                call(onAddContactRequest),
                call(onHandleRequest),
-               call(onLoadMessages)
+               call(onLoadMessages),
+               call(onSaveMessage)
             ]);
 }

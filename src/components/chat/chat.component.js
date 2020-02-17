@@ -1,6 +1,6 @@
 import React, {Component} from "react"
 import { connect } from "react-redux";
-import { sendMessage, loadMessages } from "../../redux/actions/message.actions";
+import { sendMessage, loadMessages, saveMessage } from "../../redux/actions/message.actions";
 
 import "./chat.component.css";
 
@@ -8,16 +8,20 @@ class ChatComponent extends Component{
     constructor(props){
         super(props);
         this.messageRef = React.createRef();
-        this.state = { chatId: null };
+        this.state = { 
+            chatId: null,
+            messages: []
+         };
     }
 
     handleMessage = () => {
-        const { sendMessage, currentuser } = this.props;
+        const { sendMessage, currentuser, saveMessage } = this.props;
         var text = this.messageRef.current.value;
         var date = new Date(Date.now()).toLocaleString();
         var author = currentuser.fullname;
         // console.log("The message is: ", { text, author  , date });
-        sendMessage( author, text, date );
+        saveMessage( this.state.chatId, author, date, text );
+        sendMessage( author, text, date, this.state.chatId );
     }
 
     getUser = (conversation) => {
@@ -31,6 +35,7 @@ class ChatComponent extends Component{
         const { loadMessages } = this.props;
         this.setState({chatId: id});
         loadMessages(id);
+        console.log("The conversation Id is: ", id);
     }
     
     render(){
@@ -44,7 +49,7 @@ class ChatComponent extends Component{
                             ):(
                                 this.props.currentuser.conversations.map( conversation => {
                                     return(
-                                        <div key={conversation._id} className="conversation-container" onClick={() => this.selectConversation(conversation._id)}>
+                                        <div key={conversation._id} className={ (conversation._id === this.state.chatId) ? "conversation-container-active" : "conversation-container" } onClick={() => this.selectConversation(conversation._id)}>
                                             <h4>{this.getUser(conversation).fullname}</h4> 
                                             <h5>{conversation.createdAt}</h5> 
                                         </div>
@@ -56,7 +61,20 @@ class ChatComponent extends Component{
                 <div className="chat-component">
                     <div className="chat-content">
                     {
-                        (this.state.chatId === null)?( <img className="message-icon" src={require("../../assets/images/messages-icon.png")} alt="messages-icon"/>):(<h2>Messages</h2>)
+                        (this.state.chatId === null)?( <img className="message-icon" src={require("../../assets/images/messages-icon.png")} alt="messages-icon"/>):(
+                            (this.props.messagesList)?(
+                                this.props.messagesList.map( message => {
+                                    return(
+                                        <div key={message._id}>
+                                        <h4>Author: {message.author}</h4>
+                                        <h4>Text: {message.text}</h4>
+                                        </div>
+                                    )
+                                })
+                            ):(
+                                <h2>No Messages</h2>
+                            )
+                        )
                     }
                     </div>
                     <div className="input-container">
@@ -70,15 +88,17 @@ class ChatComponent extends Component{
 }
 
 function mapStateToProps(state){
-    const { loggedIn } = state;
+    const { loggedIn, messages } = state;
     return { 
-        currentuser: (loggedIn) ? loggedIn : null 
+        currentuser: (loggedIn) ? loggedIn : null,
+        messagesList: (messages) ? messages: null 
     }
 }
 
 const mapDispatchToProps = dispatch => ({
-    sendMessage: (author, text, date) => dispatch(sendMessage({ author, text, date })),
-    loadMessages: (conversationId) => dispatch(loadMessages({conversationId}))
+    sendMessage: (author, text, date, conversationId) => dispatch(sendMessage({ author, text, date, conversationId })),
+    loadMessages: (conversationId) => dispatch(loadMessages({conversationId})),
+    saveMessage: (conversationId, author, text, date) => dispatch(saveMessage({conversationId ,author, text, date }))
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(ChatComponent);

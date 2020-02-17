@@ -1,7 +1,8 @@
 const initialState = {
     loggedIn: null,
     error: null,
-    tempData: null
+    tempData: null,
+    messages: null
 };
 
 function rootReducer(state = initialState, action){
@@ -86,9 +87,24 @@ function rootReducer(state = initialState, action){
         case "LOAD_MESSAGES_SUCCESS":
             return{
                 ...state,
-                tempData: action.payload
+                messages: action.payload
             }
         case "LOAD_MESSAGES_FAILURE":
+            return{
+                ...state,
+                error: action.payload
+            }
+        case "SAVE_MESSAGES_SUCCESS":
+            return{
+                ...state,
+                error: null
+            }
+        case "UPDATE_MESSAGES":
+            return{
+                ...state,
+                messages: [...state.messages, action.payload]
+            }
+        case "SAVE_MESSAGES_FAILURE":
             return{
                 ...state,
                 error: action.payload

@@ -1,6 +1,7 @@
 .chat-component-container{
-    background-color: antiquewhite;
+    background-color: fff;
     border: 1px solid rgb(12, 12, 173);
+    border-collapse: collapse;
     display: flex;
     width: calc(100% - 80px);
     box-sizing: border-box;
@@ -9,29 +10,41 @@
 }
 
 .my-contacts{
-    border: 1px solid red;
+    border: 1px solid #000;
+    border-collapse: collapse;
     flex-grow: 1;
     text-align: center;
 }
 
 .conversation-container{
-    border: 1px solid black;
+    background-color: #fff;
+    border: 1px solid #000;
+    border-collapse: collapse;
     padding: 0 10px;
     cursor: pointer;
 }
 
-.conversation-container h5{
+.conversation-container-active{
+    background-color: #f0ffff;
+    border: 1px solid #000;
+    border-collapse: collapse;
+    padding: 0 10px;
+    cursor: pointer;
+}
+
+.conversation-container h5, .conversation-container-active h5{
     margin: 10px;
     color: #666666;
 }
 
-.conversation-container h4{
+.conversation-container h4, .conversation-container-active h4{
     margin: 10px;
 }
 
 
 .chat-component{
-    border: 1px solid green;
+    border: 1px solid #000;
+    border-collapse: collapse;
     flex-grow: 11;
     display: flex;
     flex-direction: column;
@@ -39,7 +52,7 @@
 
 .chat-content{
    flex-grow: 11;
-   background-color: floralwhite;
+   background-color: fff;
 }
 
 .input-container{

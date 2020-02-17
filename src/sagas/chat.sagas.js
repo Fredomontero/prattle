@@ -16,10 +16,10 @@ const connect = () => {
 
 const subscribe = (socket) => {
     return eventChannel( emit => {
-        socket.on("MESSAGE_FROM_SERVER", ({ message }) => {
+        socket.on("MESSAGE_FROM_SERVER", (message) => {
             console.log("Message recieved from server: ");
             console.log(message);
-            emit( messageRecieved(message));
+            emit(messageRecieved(message));
         });
         return() => {};
     });
