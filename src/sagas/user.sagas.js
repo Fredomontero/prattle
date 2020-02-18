@@ -1,4 +1,4 @@
-import { takeEvery, put, all, call} from "redux-saga/effects";
+import { takeEvery, put, all, call, select} from "redux-saga/effects";
 import { 
     loginSuccess, 
     loginFailure, 
@@ -24,7 +24,8 @@ import {
     loadMessagesFailure,
     updateMessages,
     saveMessageSuccess,
-    saveMessageFailure
+    saveMessageFailure,
+    dontUpdateMessages
 } from "../redux/actions/message.actions";
 
 import { getChatId } from '../selectors/selectors';
@@ -515,17 +516,19 @@ export function* onLoadMessages(){
 }
 
 export function* saveMessage(action){
-
+    console.log("SAVE MESSAGE");
+    console.log(action);
     //Sending data to the Auth server
     let saveMessageBody = {
         query: `
-            mutation{
-                saveMessage({
+            mutation {
+                saveMessage(
+                    _id: "${action.payload._id}",
                     conversationId: "${action.payload.conversationId}",
                     author: "${action.payload.author}",
                     createdAt: "${action.payload.date}",
                     text: "${action.payload.text}",
-                }){
+                ){
                     _id
                     conversationId
                     author
@@ -550,15 +553,20 @@ export function* saveMessage(action){
         if(message.errors){
             yield put(saveMessageFailure(message.errors[0].message));
         }else{
-            if( getChatId === message.data.saveMessage.conversationId ){
-                yield put(
-                    updateMessages(message.data.saveMessage)
-                )
-            }else{
-                yield put(
-                    saveMessageSuccess(message.data.saveMessage)
-                )
-            }
+            // console.log("ChatId.conversationId: ", chatId.conversationId);
+            // console.log("ID of the message: ", message.data.saveMessage.conversationId);
+            // if( chatId.conversationId === message.data.saveMessage.conversationId ){
+            //     console.log("UPDATE MESSAGES")
+            //     yield put(
+            //         updateMessages(message.data.saveMessage)
+            //     )
+            // }else{
+            //     console.log("SAVE MESSAGES SUCCESS")
+            //     yield put(
+            //         saveMessageSuccess(message.data.saveMessage)
+            //     )
+            // }
+            yield put(saveMessageSuccess(message.data.saveMessage))
         }
     }catch(error){
         yield put(failToCreateUser(error));   
@@ -569,6 +577,24 @@ export function* saveMessage(action){
 
 export function* onSaveMessage(){
     yield takeEvery("SAVE_MESSAGE", saveMessage)
+}
+
+export function* updateMessagesListener(action){
+    let chatId = yield select(getChatId);
+    if( chatId.conversationId === action.payload.conversationId ){
+        console.log("UPDATE MESSAGES")
+        yield put(
+            updateMessages(action.payload)
+        )
+    }else{
+        yield put(
+            dontUpdateMessages()
+        )
+    }
+}
+
+export function* onUpdateMessagesRequest(){
+    yield takeEvery("UPDATE_MESSAGES_REQUEST", updateMessagesListener)
 }
 
 //---------------------------------------------------------------
@@ -583,6 +609,7 @@ export function* userSagas(){
                call(onAddContactRequest),
                call(onHandleRequest),
                call(onLoadMessages),
-               call(onSaveMessage)
+               call(onSaveMessage),
+               call(onUpdateMessagesRequest)
             ]);
 }

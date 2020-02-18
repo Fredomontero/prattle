@@ -2,7 +2,8 @@ const initialState = {
     loggedIn: null,
     error: null,
     tempData: null,
-    messages: null
+    messages: null,
+    chatId: null
 };
 
 function rootReducer(state = initialState, action){
@@ -108,6 +109,16 @@ function rootReducer(state = initialState, action){
             return{
                 ...state,
                 error: action.payload
+            }
+        case "SELECT_CONVERSATION":
+            return{
+                ...state,
+                chatId: action.payload
+            }
+        case "DONT_UPDATE_MESSAGES":
+            return{
+                ...state,
+                error: null
             }
         default:
             return state;

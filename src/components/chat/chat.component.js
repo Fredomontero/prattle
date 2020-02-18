@@ -1,6 +1,7 @@
 import React, {Component} from "react"
 import { connect } from "react-redux";
-import { sendMessage, loadMessages, saveMessage } from "../../redux/actions/message.actions";
+import { sendMessage, loadMessages, saveMessage, selectConversation } from "../../redux/actions/message.actions";
+import { ObjectID } from '../../utils/utils';
 
 import "./chat.component.css";
 
@@ -20,8 +21,10 @@ class ChatComponent extends Component{
         var date = new Date(Date.now()).toLocaleString();
         var author = currentuser.fullname;
         // console.log("The message is: ", { text, author  , date });
-        saveMessage( this.state.chatId, author, date, text );
-        sendMessage( author, text, date, this.state.chatId );
+        var messageID = ObjectID();
+        console.log("The message Id is: ", messageID)
+        saveMessage( messageID, this.state.chatId, author, text, date );
+        sendMessage( messageID, author, text, date, this.state.chatId );
     }
 
     getUser = (conversation) => {
@@ -32,8 +35,9 @@ class ChatComponent extends Component{
     }
 
     selectConversation = (id) => {
-        const { loadMessages } = this.props;
+        const { loadMessages, selectConversation } = this.props;
         this.setState({chatId: id});
+        selectConversation(id);
         loadMessages(id);
         console.log("The conversation Id is: ", id);
     }
@@ -66,8 +70,9 @@ class ChatComponent extends Component{
                                 this.props.messagesList.map( message => {
                                     return(
                                         <div key={message._id}>
-                                        <h4>Author: {message.author}</h4>
-                                        <h4>Text: {message.text}</h4>
+                                            <h4>Message Id: {message._id}</h4>
+                                            <h4>Author: {message.author}</h4>
+                                            <h4>Text: {message.text}</h4>
                                         </div>
                                     )
                                 })
@@ -96,9 +101,10 @@ function mapStateToProps(state){
 }
 
 const mapDispatchToProps = dispatch => ({
-    sendMessage: (author, text, date, conversationId) => dispatch(sendMessage({ author, text, date, conversationId })),
+    sendMessage: (_id, author, text, date, conversationId) => dispatch(sendMessage({ _id, author, text, date, conversationId })),
     loadMessages: (conversationId) => dispatch(loadMessages({conversationId})),
-    saveMessage: (conversationId, author, text, date) => dispatch(saveMessage({conversationId ,author, text, date }))
+    saveMessage: (_id, conversationId, author, text, date) => dispatch(saveMessage({_id, conversationId ,author, text, date })),
+    selectConversation: (conversationId) => dispatch(selectConversation({conversationId}))
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(ChatComponent);

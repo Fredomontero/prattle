@@ -1,5 +1,5 @@
 import { put, call, take, fork } from "redux-saga/effects";
-import { messageRecieved } from "../redux/actions/message.actions";
+import { updateMessagesRequest } from "../redux/actions/message.actions";
 import { eventChannel } from 'redux-saga';
 import io from 'socket.io-client';
 const url = 'http://localhost:4001';
@@ -19,7 +19,8 @@ const subscribe = (socket) => {
         socket.on("MESSAGE_FROM_SERVER", (message) => {
             console.log("Message recieved from server: ");
             console.log(message);
-            emit(messageRecieved(message));
+            emit(updateMessagesRequest(message));
+            // emit(messageRecieved(message));
         });
         return() => {};
     });

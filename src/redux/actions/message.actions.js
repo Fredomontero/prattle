@@ -42,3 +42,17 @@ export const saveMessageFailure = error => ({
     type: "SAVE_MESSAGES_FAILURE",
     payload: error
 });
+
+export const selectConversation = conversationId => ({
+    type: "SELECT_CONVERSATION",
+    payload: conversationId
+});
+
+export const updateMessagesRequest = message => ({
+    type: "UPDATE_MESSAGES_REQUEST",
+    payload: message
+});
+
+export const dontUpdateMessages = () => ({
+    type: "DONT_UPDATE_MESSAGES"
+});
