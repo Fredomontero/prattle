@@ -6,7 +6,8 @@ import ChatComponent from "../../components/chat/chat.component";
 import SettingsComponent from "../../components/settings/settings.component";
 import UsersComponent from "../../components/users/users.component";
 import NotificationsComponent from "../../components/notifications/notifications.component";
-import { MdChatBubble, MdPersonAdd, MdSettings, MdPowerSettingsNew, MdNotifications } from "react-icons/md";
+import ModalComponent from "../../components/modal/modal.component"
+import { MdChatBubble, MdPersonAdd, MdSettings, MdPowerSettingsNew, MdNotifications, MdSentimentSatisfied } from "react-icons/md";
 
 
 class DashboardPage extends Component{
@@ -48,6 +49,7 @@ class DashboardPage extends Component{
                         <li onClick={ () => this.setState({section: "users"}) } ><MdPersonAdd/></li>
                         <li onClick={ () => this.setState({section: "settings"}) } ><MdSettings/></li>
                         <li onClick={ this.submitHandler }><MdPowerSettingsNew/></li>
+                        <li onClick={ () => this.setState({section: "modal"}) } ><MdSentimentSatisfied/></li>
                     </ul>
                 </div>
                 <div className="dashboard-body">
@@ -60,7 +62,12 @@ class DashboardPage extends Component{
                             (this.state.section === "settings") ? (
                                 <SettingsComponent/>
                             ) : (
-                                <NotificationsComponent/>
+                                (this.state.section === "notifications") ? (
+                                    <NotificationsComponent/>
+                                ) : (
+                                    <ModalComponent/>
+                                )
+                                
                             )
                             
                         )

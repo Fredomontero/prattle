@@ -581,7 +581,7 @@ export function* onSaveMessage(){
 
 export function* updateMessagesListener(action){
     let chatId = yield select(getChatId);
-    if( chatId.conversationId === action.payload.conversationId ){
+    if( chatId && chatId.conversationId === action.payload.conversationId ){
         console.log("UPDATE MESSAGES")
         yield put(
             updateMessages(action.payload)

@@ -71,3 +71,33 @@
     margin-left: calc(50% - 250px);
     margin-top: calc(15%);
 }
+
+.messageBubble{
+    margin: 5px;
+    border: 1px solid #000;
+    border-radius: 15px;
+    display: inline-block;
+}
+
+.messageBubble h5{
+    margin: 5px;
+    display: inline-block;
+}
+
+.sentMessagePosition{
+    display: flex;
+    justify-content: flex-end;
+}
+
+.recievedMessagePosition{
+    display: flex;
+    justify-content: flex-start;
+}
+
+.sentMessageColor{
+    background-color: #dbf5ff;
+}
+
+.recievedMessageColor{
+    background-color: #fff5ee;
+}

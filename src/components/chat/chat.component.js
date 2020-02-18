@@ -66,13 +66,17 @@ class ChatComponent extends Component{
                     <div className="chat-content">
                     {
                         (this.state.chatId === null)?( <img className="message-icon" src={require("../../assets/images/messages-icon.png")} alt="messages-icon"/>):(
-                            (this.props.messagesList)?(
+                            (this.props.messagesList && this.props.messagesList.length > 0)?(
                                 this.props.messagesList.map( message => {
                                     return(
-                                        <div key={message._id}>
-                                            <h4>Message Id: {message._id}</h4>
-                                            <h4>Author: {message.author}</h4>
-                                            <h4>Text: {message.text}</h4>
+                                        <div key={message._id} className="messageContainer">
+                                            <div className={(message.author === this.props.currentuser.fullname) ? "sentMessagePosition" : "recievedMessagePosition"}>
+                                                <div className={(message.author === this.props.currentuser.fullname) ? " messageBubble sentMessageColor" : "messageBubble recievedMessageColor"}>
+                                                    <h5>Author: {message.author}</h5><br/>
+                                                    <h5>Text: {message.text}</h5><br/>
+                                                    <h5>Date: {message.createdAt}</h5>
+                                                </div>
+                                            </div>
                                         </div>
                                     )
                                 })
