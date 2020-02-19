@@ -9,10 +9,19 @@ class ModalComponent extends Component{
     constructor(props){
         super(props);
         this.state = { 
-            render: true
+            render: true,
+            participants: []
          };
     }
     
+    updateParticipants = (contact_id) => {
+        if( this.state.participants.includes(contact_id)){
+            console.log("Remove user");
+        }else{
+            console.log("Add user");
+        }
+    }
+
     render(){
         const { render } = this.state;
         const { currentuser } = this.props;
@@ -32,7 +41,7 @@ class ModalComponent extends Component{
                                 (currentuser && currentuser.contacts) ? (
                                     currentuser.contacts.map( contact => {
                                         return(
-                                            <div className="contact-container" key={contact._id}>
+                                            <div className="contact-container" key={contact._id} onClick={() => this.updateParticipants(contact._id)}>
                                                 <div className="contact-name">{contact.fullname}</div>
                                                 <div className="contact-selected"><MdCheck/></div>
                                             </div>
