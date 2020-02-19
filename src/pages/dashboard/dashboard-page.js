@@ -15,7 +15,8 @@ class DashboardPage extends Component{
         super(props);
         // console.log("Dashboard Component");
         this.state = {
-            section: "chats"
+            section: "chats",
+            modal: false
         }
     }
 
@@ -31,6 +32,10 @@ class DashboardPage extends Component{
     submitHandler = () => {
         const { logout } = this.props;
         logout();
+    }
+
+    modalHandler = () => {
+        this.setState({modal: !this.state.modal});
     }
 
     render(){
@@ -49,7 +54,7 @@ class DashboardPage extends Component{
                         <li onClick={ () => this.setState({section: "users"}) } ><MdPersonAdd/></li>
                         <li onClick={ () => this.setState({section: "settings"}) } ><MdSettings/></li>
                         <li onClick={ this.submitHandler }><MdPowerSettingsNew/></li>
-                        <li onClick={ () => this.setState({section: "modal"}) } ><MdSentimentSatisfied/></li>
+                        <li onClick={ this.modalHandler } ><MdSentimentSatisfied/></li>
                     </ul>
                 </div>
                 <div className="dashboard-body">
@@ -62,12 +67,7 @@ class DashboardPage extends Component{
                             (this.state.section === "settings") ? (
                                 <SettingsComponent/>
                             ) : (
-                                (this.state.section === "notifications") ? (
-                                    <NotificationsComponent/>
-                                ) : (
-                                    <ModalComponent/>
-                                )
-                                
+                                <NotificationsComponent/>
                             )
                             
                         )
@@ -75,6 +75,7 @@ class DashboardPage extends Component{
                     }
                 </div>
                 </div>
+                {(this.state.modal === true) ? (<ModalComponent handler={this.modalHandler} />):(null)}
             </div>
         )
     }
