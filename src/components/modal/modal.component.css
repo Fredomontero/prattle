@@ -83,6 +83,10 @@
     color: #21abcd;
 }
 
+.contact-unselected{
+    display: none;
+}
+
 .modal-button{
     margin: 20px 0;
     background-color: #008000;

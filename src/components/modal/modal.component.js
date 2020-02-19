@@ -12,13 +12,17 @@ class ModalComponent extends Component{
             render: true,
             participants: []
          };
+         console.log("Initial State: ", this.state.participants);
     }
     
     updateParticipants = (contact_id) => {
         if( this.state.participants.includes(contact_id)){
             console.log("Remove user");
+            var updatedArray = this.state.participants.filter( user => user !== contact_id );
+            console.log("updatedArray: ", updatedArray);
+            this.setState({participants: [...updatedArray]}, () => console.log("New State: ", this.state.participants));
         }else{
-            console.log("Add user");
+            this.setState({participants: [...this.state.participants, contact_id]}, () => console.log("New State: ", this.state.participants));
         }
     }
 
@@ -43,7 +47,7 @@ class ModalComponent extends Component{
                                         return(
                                             <div className="contact-container" key={contact._id} onClick={() => this.updateParticipants(contact._id)}>
                                                 <div className="contact-name">{contact.fullname}</div>
-                                                <div className="contact-selected"><MdCheck/></div>
+                                                <div className={this.state.participants.includes(contact._id)?"contact-selected":"contact-unselected"}><MdCheck/></div>
                                             </div>
                                         )
                                     })
