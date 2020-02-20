@@ -10,17 +10,14 @@ class UsersComponent extends Component{
         // console.log("This is the Users Component");
 
         this.state = {
-            pattern: ""
+            pattern: "",
+            contacts: []
         }
         this.patternRef = React.createRef();
     }
 
-    componentDidMount(){
-        // console.log("The tempData is: ", this.props.tempData);
-      }
-
     submitHandler = () => {
-        const { retrieveUsers } = this.props;
+        const { retrieveUsers, currentuser } = this.props;
         let pattern = this.patternRef.current.value;
         retrieveUsers(pattern);
     }
@@ -41,11 +38,13 @@ class UsersComponent extends Component{
                 <input type="button" value="Search" onClick={ this.submitHandler }/>
                 <h1>Users</h1>
                 <div className="users-container">
+                {console.log("currentUser: ", currentuser)}
+                {console.log("tempData: ", this.props.tempData)}
                 {
                     (!this.props.tempData)?(
                         <h2>There are no contacts...</h2>
                     ):(
-                        this.props.tempData.filter( user => user._id !== currentuser._id && !currentuser.contacts.includes(user.fullname) )
+                        this.props.tempData.filter( user => user._id !== currentuser._id && !this.props.contacts.includes(user._id))
                         .map(user => {
                             return(
                                 <div key={user._id} className="user-card">
@@ -71,7 +70,8 @@ function mapStateToProps(state){
     //     console.log("tempData: ", tempData, "Current user is: ", loggedIn);
     return { 
         tempData: (tempData) ? tempData : null,
-        currentuser: (loggedIn) ? loggedIn : null 
+        currentuser: (loggedIn) ? loggedIn : null,
+        contacts: loggedIn.contacts.map( contact => contact._id )
     }
   }
 

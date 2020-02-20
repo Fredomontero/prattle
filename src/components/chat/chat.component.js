@@ -56,7 +56,7 @@ class ChatComponent extends Component{
                                 this.props.currentuser.conversations.map( conversation => {
                                     return(
                                         <div key={conversation._id} className={ (conversation._id === this.state.chatId) ? "conversation-container-active" : "conversation-container" } onClick={() => this.selectConversation(conversation._id)}>
-                                            <h4>{this.getUser(conversation)}</h4> 
+                                            <h4>{(conversation.name === 'noname') ? (this.getUser(conversation)):(conversation.name)}</h4> 
                                             <h5>{conversation.createdAt}</h5> 
                                         </div>
                                     )
