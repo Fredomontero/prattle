@@ -29,9 +29,11 @@ class ChatComponent extends Component{
 
     getUser = (conversation) => {
         let { currentuser } = this.props;
-        let contactId = conversation.participants.filter( participant => participant !== currentuser._id ).map( participant => participant )[0];
-        let myContact = currentuser.contacts.filter( contact => contact._id === contactId ).map( contact => contact )[0];
-        return myContact;
+        console.log("CONVERSATION: ", conversation);
+        let contactId = conversation.participants.filter( participant => participant._id !== currentuser._id ).map( participant => participant.name )[0];
+        // let myContact = currentuser.contacts.filter( contact => contact._id === contactId ).map( contact => contact )[0];
+        console.log(contactId)
+        return contactId;
     }
 
     selectConversation = (id) => {
@@ -54,7 +56,7 @@ class ChatComponent extends Component{
                                 this.props.currentuser.conversations.map( conversation => {
                                     return(
                                         <div key={conversation._id} className={ (conversation._id === this.state.chatId) ? "conversation-container-active" : "conversation-container" } onClick={() => this.selectConversation(conversation._id)}>
-                                            <h4>{this.getUser(conversation).fullname}</h4> 
+                                            <h4>{this.getUser(conversation)}</h4> 
                                             <h5>{conversation.createdAt}</h5> 
                                         </div>
                                     )

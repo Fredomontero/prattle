@@ -19,5 +19,8 @@
     font-size: 18px;
     width: 40%;
     cursor: pointer;
+}
 
+.users-container{
+    overflow-y: scroll;
 }

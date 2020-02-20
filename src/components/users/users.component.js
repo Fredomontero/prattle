@@ -40,6 +40,7 @@ class UsersComponent extends Component{
                 <input type="text" id="pattern" placeholder="Search users" ref={this.patternRef}/>
                 <input type="button" value="Search" onClick={ this.submitHandler }/>
                 <h1>Users</h1>
+                <div className="users-container">
                 {
                     (!this.props.tempData)?(
                         <h2>There are no contacts...</h2>
@@ -57,6 +58,7 @@ class UsersComponent extends Component{
                         })
                     )
                 }
+                </div>
             </div>
             
         )

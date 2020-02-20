@@ -261,7 +261,12 @@ export function* loadProfile(action){
                     }
                     conversations{
                         _id
-                        participants
+                        name
+                        participants{
+                            _id
+                            name
+                            addedAt
+                        }
                         createdAt
                         lastMessageAt
                     }
@@ -417,7 +422,9 @@ export function* resolveFriendshipRequest(action){
                     value: ${action.payload.value},
                     requestId: "${action.payload.requestId}",
                     sourceId: "${action.payload.sourceId}",
+                    sourceName: "${action.payload.sourceName}",
                     targetId: "${action.payload.targetId}"
+                    targetName: "${action.payload.targetName}"
                 }){
                     _id
                     fullname

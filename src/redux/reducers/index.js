@@ -68,7 +68,7 @@ function rootReducer(state = initialState, action){
         case "ADD_CONTACT_SUCCESS":
             return{
                 ...state,
-                loggedIn: action.payload
+                error: null
             }
         case "ADD_CONTACT_FAILURE":
             return{
@@ -78,7 +78,7 @@ function rootReducer(state = initialState, action){
         case "HANDLE_FRIENDSHIP_REQUEST_SUCCESS":
             return{
                 ...state,
-                loggedIn: action.payload
+                error: null
             }
         case "HANDLE_FRIENDSHIP_REQUEST_FAILURE":
             return{

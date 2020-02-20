@@ -6,9 +6,9 @@ import { handleRequest } from "../../redux/actions/user.actions";
 
 class NotificationsComponent extends Component{
 
-    friendshipRequestHandler(value, requestId, sourceId, targetId){
+    friendshipRequestHandler(value, requestId, sourceId, sourceName, targetId, targetName){
         const { handleRequest } = this.props;
-        handleRequest(value, requestId, sourceId, targetId);
+        handleRequest(value, requestId, sourceId, sourceName, targetId, targetName);
     }
 
     render(){
@@ -38,8 +38,8 @@ class NotificationsComponent extends Component{
                                     <div  className="request-frame">
                                         <h4>{request.sourceName + " "} wants to be your friend</h4>
                                         <div className="request-buttons">
-                                            <input onClick = { () => this.friendshipRequestHandler(true, request.requestId, request.sourceId, request.targetId) } className="accept-buton" type="button" value="Accept"/>
-                                            <input onClick = { () => this.friendshipRequestHandler(false, request.requestId, request.sourceId, request.targetId) } className="decline-buton" type="button" value="Decline"/>
+                                            <input onClick = { () => this.friendshipRequestHandler(true, request.requestId, request.sourceId, request.sourceName, request.targetId, request.targetName) } className="accept-buton" type="button" value="Accept"/>
+                                            <input onClick = { () => this.friendshipRequestHandler(false, request.requestId, request.sourceId, request.sourceName,  request.targetId, request.targetName) } className="decline-buton" type="button" value="Decline"/>
                                         </div>
                                     </div>
                                 </div>
@@ -59,7 +59,7 @@ function mapStateToProps(state){
 }
 
 const mapDispatchToProps = dispatch => ({
-    handleRequest: (value, requestId, sourceId, targetId) => dispatch(handleRequest({value, requestId, sourceId, targetId}))
+    handleRequest: (value, requestId, sourceId, sourceName, targetId, targetName) => dispatch(handleRequest({value, requestId, sourceId, sourceName, targetId, targetName}))
   })
 
 export default connect(mapStateToProps, mapDispatchToProps)(NotificationsComponent);
