@@ -3,6 +3,8 @@ import { connect } from "react-redux";
 import { logIn } from "../../redux/actions/user.actions";
 import './login-page.css';
 
+import { FormattedMessage } from 'react-intl';
+
 class LoginPage extends Component {
 
     constructor(props){
@@ -34,7 +36,12 @@ class LoginPage extends Component {
     render(){
         return(
             <div className="signup-container">
-                <h1>Login</h1>
+                <h1>
+                    <FormattedMessage
+                        id="login.header"
+                        defaultMessage="Login" 
+                    />
+                </h1>
                 <form className="signup-form">
                     <input type="email" id="email" placeholder="Email" ref={this.emailRef}/>
                     <input type="password" id="password" placeholder="Password" ref={this.passwordRef}/>
