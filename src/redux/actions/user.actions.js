@@ -116,7 +116,12 @@ export const handleRequestFailure = error => ({
     payload: error
 });
 
-export const loadSocket =  fullname => ({
+export const loadSocket = fullname => ({
     type: "LOAD_SOCKET",
     payload: fullname
+});
+
+export const createGroupRequest = data => ({
+    type: "CREATE_GROUP_REQUEST",
+    payload: data
 });

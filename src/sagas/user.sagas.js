@@ -25,7 +25,9 @@ import {
     updateMessages,
     saveMessageSuccess,
     saveMessageFailure,
-    dontUpdateMessages
+    dontUpdateMessages,
+    createGroupSuccess,
+    createGroupFailure
 } from "../redux/actions/message.actions";
 
 import { getChatId } from '../selectors/selectors';
@@ -604,6 +606,57 @@ export function* onUpdateMessagesRequest(){
     yield takeEvery("UPDATE_MESSAGES_REQUEST", updateMessagesListener)
 }
 
+export function* createGroupListener(action){
+    console.log(action);
+
+    //Regex for removing quotes around properties
+    //participants = participants.replace(/\"([^(\")"]+)\":/g,"$1:");
+
+    let createGroupRequestBody = {
+        query: `
+            mutation{
+                createGroup(UsernameInput: ${JSON.stringify(action.payload.participants).replace(/"([^(")"]+)":/g,"$1:")}, GroupName: "${action.payload.groupName}"
+                ){
+                    _id
+                    name
+                }
+            }
+        `
+    }
+
+    // console.log("QUERY CREATE GROUP");
+    // console.log(createGroupRequestBody.query);
+    
+    let createGroupRequestOptions = {
+        method: 'POST',
+        body: JSON.stringify(createGroupRequestBody),
+        credentials: "include",
+        headers: {
+            'Content-Type': 'application/json'
+        }
+    }
+
+    try{
+        let res = yield call(fetch, 'http://localhost:4001/graphql', createGroupRequestOptions);
+        let resData = yield res.json();
+        console.log(resData);
+        if(resData.errors){
+            yield put(createGroupFailure(resData.errors[0].message));
+        }else{
+            yield put(
+                createGroupSuccess(resData.data.createGroup )
+            )
+        }
+    }catch(error){
+        yield put(createGroupFailure(error));
+    }
+
+}
+
+export function* onCreateGroupRequest(){
+    yield takeEvery("CREATE_GROUP_REQUEST", createGroupListener)
+}
+
 //---------------------------------------------------------------
 
 export function* userSagas(){
@@ -617,6 +670,7 @@ export function* userSagas(){
                call(onHandleRequest),
                call(onLoadMessages),
                call(onSaveMessage),
-               call(onUpdateMessagesRequest)
+               call(onUpdateMessagesRequest),
+               call(onCreateGroupRequest)
             ]);
 }

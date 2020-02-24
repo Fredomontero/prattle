@@ -92,4 +92,20 @@
     background-color: #008000;
     color: #fff;
     padding: 5px;
+    cursor: pointer;
+}
+
+.enabled{
+    opacity: 1;
+}
+
+.disabled{
+    opacity: 0.5;
+    cursor: not-allowed;
+}
+
+.user-message{
+    font-size: 10px;
+    margin-top: 15px;
+    color: #91a3b0;
 }

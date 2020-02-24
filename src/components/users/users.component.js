@@ -17,7 +17,7 @@ class UsersComponent extends Component{
     }
 
     submitHandler = () => {
-        const { retrieveUsers, currentuser } = this.props;
+        const { retrieveUsers } = this.props;
         let pattern = this.patternRef.current.value;
         retrieveUsers(pattern);
     }

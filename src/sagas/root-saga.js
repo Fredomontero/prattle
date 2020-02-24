@@ -3,6 +3,5 @@ import { userSagas } from "./user.sagas";
 import { chatSagas } from "./chat.sagas";
 
 export default function* rootSaga(){
-    // yield all([call(userSagas), call(messageSagas), call(chatSagas)])
     yield all([call(userSagas), call(chatSagas)])
 }

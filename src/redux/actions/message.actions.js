@@ -56,3 +56,13 @@ export const updateMessagesRequest = message => ({
 export const dontUpdateMessages = () => ({
     type: "DONT_UPDATE_MESSAGES"
 });
+
+export const createGroupSuccess = messages => ({
+    type: "CREATE_GROUP_SUCCESS",
+    payload: messages
+});
+
+export const createGroupFailure = error => ({
+    type: "CREATE_GROUP_FAILURE",
+    payload: error
+});

@@ -1,5 +1,6 @@
 import React, {Component} from "react";
 import { connect } from "react-redux";
+import { createGroupRequest } from "../../redux/actions/user.actions";
 import { MdClose, MdCheck } from "react-icons/md";
 
 
@@ -12,17 +13,39 @@ class ModalComponent extends Component{
             render: true,
             participants: []
          };
-         console.log("Initial State: ", this.state.participants);
+         
+         this.groupNameRef = React.createRef();
     }
-    
-    updateParticipants = (contact_id) => {
-        if( this.state.participants.includes(contact_id)){
-            console.log("Remove user");
-            var updatedArray = this.state.participants.filter( user => user !== contact_id );
-            console.log("updatedArray: ", updatedArray);
-            this.setState({participants: [...updatedArray]}, () => console.log("New State: ", this.state.participants));
+
+    updateParticipants = (contact) => {
+        if(this.verifyContact(contact._id)){
+            //Remove Contact
+            var updatedArray = this.state.participants.filter( participant => participant._id !== contact._id);
+            this.setState({participants: [...updatedArray]});
         }else{
-            this.setState({participants: [...this.state.participants, contact_id]}, () => console.log("New State: ", this.state.participants));
+            //Add Contact
+            this.setState({participants: [...this.state.participants, {
+              _id: contact._id,
+               name: contact.fullname,
+               addedAt: new Date(Date.now()).toLocaleString()
+            }]});
+        }
+    }
+
+    verifyContact = (id) => {
+        var result = this.state.participants.filter( participant => participant._id === id);
+        return (result.length > 0) ? true : false;
+    }
+
+    createGroup = () => {
+        const { createGroupRequest, currentuser } = this.props;
+        const groupName = this.groupNameRef.current.value;
+        if(groupName.length > 0 && this.state.participants.length > 2){
+            createGroupRequest([{
+                _id: currentuser._id,
+                name: currentuser.fullname,
+                addedAt: new Date(Date.now()).toLocaleString()
+            }, ...this.state.participants], groupName);
         }
     }
 
@@ -38,16 +61,17 @@ class ModalComponent extends Component{
                     </div>
                     <div className="modal-content">
                         <h3 className="title">Create new group</h3>
+                        <p className="user-message">Type a name and add at least 3 participants</p>
                         <br/>
-                        <input className="name-input" type="text" id="name" placeholder="Name of the group" autoComplete="off"/><br/>
+                        <input className="name-input" type="text" id="name" placeholder="Name of the group" autoComplete="off" ref={this.groupNameRef}/><br/>
                         <div className="user-list">
                             {
                                 (currentuser && currentuser.contacts) ? (
                                     currentuser.contacts.map( contact => {
                                         return(
-                                            <div className="contact-container" key={contact._id} onClick={() => this.updateParticipants(contact._id)}>
+                                            <div className="contact-container" key={contact._id} onClick={() => this.updateParticipants(contact)}>
                                                 <div className="contact-name">{contact.fullname}</div>
-                                                <div className={this.state.participants.includes(contact._id)?"contact-selected":"contact-unselected"}><MdCheck/></div>
+                                                <div className={this.verifyContact(contact._id)?"contact-selected":"contact-unselected"}><MdCheck/></div>
                                             </div>
                                         )
                                     })
@@ -56,7 +80,7 @@ class ModalComponent extends Component{
                                 )
                             }
                         </div>
-                        <div className="modal-button">Create Group</div>
+                        <div className={ (this.state.participants.length > 2 && this.groupNameRef.current.value.length > 0) ? "modal-button enabled": "modal-button disabled" } onClick={this.createGroup}>Create Group</div>
                     </div>
                 </div>
             </div>
@@ -71,4 +95,8 @@ function mapStateToProps(state){
     }
 }
 
-export default connect(mapStateToProps)(ModalComponent);
+const mapDispatchToProps = dispatch => ({
+    createGroupRequest: (participants, groupName) => dispatch(createGroupRequest({ participants, groupName }))
+});
+
+export default connect(mapStateToProps, mapDispatchToProps)(ModalComponent);

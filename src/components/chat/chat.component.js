@@ -20,19 +20,16 @@ class ChatComponent extends Component{
         var text = this.messageRef.current.value;
         var date = new Date(Date.now()).toLocaleString();
         var author = currentuser.fullname;
-        // console.log("The message is: ", { text, author  , date });
         var messageID = ObjectID();
-        console.log("The message Id is: ", messageID)
+        // console.log("The message Id is: ", messageID)
         saveMessage( messageID, this.state.chatId, author, text, date );
         sendMessage( messageID, author, text, date, this.state.chatId );
     }
 
     getUser = (conversation) => {
         let { currentuser } = this.props;
-        console.log("CONVERSATION: ", conversation);
         let contactId = conversation.participants.filter( participant => participant._id !== currentuser._id ).map( participant => participant.name )[0];
-        // let myContact = currentuser.contacts.filter( contact => contact._id === contactId ).map( contact => contact )[0];
-        console.log(contactId)
+        // console.log(contactId)
         return contactId;
     }
 
