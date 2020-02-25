@@ -1,4 +1,4 @@
-import React, { Component, useContext } from 'react';
+import React, { Component } from 'react';
 import { connect } from "react-redux";
 import { logIn } from "../../redux/actions/user.actions";
 import { ContextConsumer } from "../../components/IntlWrapper/IntlWrapper.component";
