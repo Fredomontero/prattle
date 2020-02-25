@@ -1,6 +1,7 @@
-import React, { Component } from 'react';
+import React, { Component, useContext } from 'react';
 import { connect } from "react-redux";
 import { logIn } from "../../redux/actions/user.actions";
+import { ContextConsumer } from "../../components/IntlWrapper/IntlWrapper.component";
 import './login-page.css';
 
 import { FormattedMessage } from 'react-intl';
@@ -35,18 +36,32 @@ class LoginPage extends Component {
     
     render(){
         return(
-            <div className="signup-container">
-                <h1>
-                    <FormattedMessage
-                        id="login.header"
-                        defaultMessage="Login" 
-                    />
-                </h1>
-                <form className="signup-form">
-                    <input type="email" id="email" placeholder="Email" ref={this.emailRef}/>
-                    <input type="password" id="password" placeholder="Password" ref={this.passwordRef}/>
-                    <input type="button" value="Login" onClick={ this.submitHandler }/>
-            </form>
+            <div>
+                <ContextConsumer>
+                    {props => {
+                        return(
+                            <select onChange={props.selectLanguage}>
+                                <option value="en">English</option>
+                                <option value="es">Spanish</option>
+                                <option value="por">Portuguese</option>
+                            </select>
+                        )
+                    }}
+                    
+                </ContextConsumer>
+                <div className="signup-container">
+                        <h1>
+                            <FormattedMessage
+                                id="login.header"
+                                defaultMessage="Login" 
+                            />
+                        </h1>
+                        <form className="signup-form">
+                            <input type="email" id="email" placeholder="Email" ref={this.emailRef}/>
+                            <input type="password" id="password" placeholder="Password" ref={this.passwordRef}/>
+                            <input type="button" value="Login" onClick={ this.submitHandler }/>
+                    </form>
+                </div>
             </div>
         )
     }

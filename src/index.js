@@ -5,26 +5,14 @@ import App from './App';
 import { Provider } from "react-redux";
 import store from "./redux/store";
 
-import { IntlProvider } from "react-intl"
-import Spanish from "./languages/es.json";
-import English from "./languages/en.json";
-import Portuguese from "./languages/por.json";
-
-const local = navigator.language;
-let lang;
-
-if(local === "en-US"){
-    lang = English;
-}else{
-    lang = Spanish;
-}
+import { IntlWrapper } from './components/IntlWrapper/IntlWrapper.component';
 
 ReactDOM.render(
-    <IntlProvider locale={local} messages={Portuguese}>
+    <IntlWrapper>
         <Provider store={store}>
             <App />
         </Provider>
-    </IntlProvider>, 
+    </IntlWrapper>, 
     document.getElementById('root')
 );
 
