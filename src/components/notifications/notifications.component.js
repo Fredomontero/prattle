@@ -3,6 +3,7 @@ import React, { Component } from "react";
 import { connect } from "react-redux";
 import { handleRequest } from "../../redux/actions/user.actions";
 
+import { FormattedMessage } from 'react-intl';
 
 class NotificationsComponent extends Component{
 
@@ -14,15 +15,21 @@ class NotificationsComponent extends Component{
     render(){
         return(
             <div className="notifications-container">
-                <h1>This is the notifications component</h1>
+                <h1>
+                    <FormattedMessage id="notifications.title" defaultMessage="Notifications" />
+                </h1>
                 {
                     (this.props.currentUser.pendingRequests.length > 0)?(
                         this.props.currentUser.pendingRequests.map( pendingRequest => {
                             return(
                                 <div key={pendingRequest.requestId}>
-                                    <h2>Pending Requests</h2>
+                                    <h2>
+                                        <FormattedMessage id="pending.requests.title" defaultMessage="Pending Requests" />
+                                    </h2>
                                     <div className="pending-request-frame">
-                                        <h4>{ pendingRequest.targetName + " "} hasn't approve your friend request</h4>
+                                        <h4>{ pendingRequest.targetName + " "} 
+                                            <FormattedMessage id="pending.requests.text" defaultMessage="hasn't approve your friend request" />
+                                        </h4>
                                     </div>
                                 </div>
                             )
@@ -34,12 +41,20 @@ class NotificationsComponent extends Component{
                         this.props.currentUser.requests.map( request => {
                             return(
                                 <div key={request.requestId}>
-                                    <h2>Friendship Requests</h2>
+                                    <h2>
+                                        <FormattedMessage id="friendship.requests.title" defaultMessage="Friendship Requests" />
+                                    </h2>
                                     <div  className="request-frame">
-                                        <h4>{request.sourceName + " "} wants to be your friend</h4>
+                                        <h4>{request.sourceName + " "} 
+                                            <FormattedMessage id="friendship.requests.text" defaultMessage=" wants to be your friend" />
+                                        </h4>
                                         <div className="request-buttons">
-                                            <input onClick = { () => this.friendshipRequestHandler(true, request.requestId, request.sourceId, request.sourceName, request.targetId, request.targetName) } className="accept-buton" type="button" value="Accept"/>
-                                            <input onClick = { () => this.friendshipRequestHandler(false, request.requestId, request.sourceId, request.sourceName,  request.targetId, request.targetName) } className="decline-buton" type="button" value="Decline"/>
+                                            <FormattedMessage id="friendship.requests.accept" defaultMessage="Accept">
+                                                { value => <input onClick = { () => this.friendshipRequestHandler(true, request.requestId, request.sourceId, request.sourceName, request.targetId, request.targetName) } className="accept-buton" type="button" value={value}/> }
+                                            </FormattedMessage>
+                                            <FormattedMessage id="friendship.requests.decline" defaultMessage="Decline">
+                                                { value => <input onClick = { () => this.friendshipRequestHandler(false, request.requestId, request.sourceId, request.sourceName,  request.targetId, request.targetName) } className="decline-buton" type="button" value={value}/> }
+                                            </FormattedMessage>
                                         </div>
                                     </div>
                                 </div>

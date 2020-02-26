@@ -1,4 +1,5 @@
 import React, {Component} from "react"
+import { FormattedMessage } from 'react-intl';
 
 class SettingsComponent extends Component{
     constructor(props){
@@ -8,7 +9,9 @@ class SettingsComponent extends Component{
     
     render(){
         return(
-            <h1>This is the Settings component</h1>
+            <h1>
+                <FormattedMessage id="settings.title" defaultMessage="Settings" />
+            </h1>
         )
     }
 }

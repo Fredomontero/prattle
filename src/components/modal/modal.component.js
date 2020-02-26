@@ -2,7 +2,7 @@ import React, {Component} from "react";
 import { connect } from "react-redux";
 import { createGroupRequest } from "../../redux/actions/user.actions";
 import { MdClose, MdCheck } from "react-icons/md";
-
+import { FormattedMessage } from 'react-intl';
 
 import "./modal.component.css";
 
@@ -60,10 +60,16 @@ class ModalComponent extends Component{
                         <div className="close-icon-container"><MdClose className="close-icon" onClick={ this.props.handler }/></div>
                     </div>
                     <div className="modal-content">
-                        <h3 className="title">Create new group</h3>
-                        <p className="user-message">Type a name and add at least 3 participants</p>
+                        <h3 className="title">
+                            <FormattedMessage id="create.group.title" defaultMessage="Create new group" /> 
+                        </h3>
+                        <p className="user-message">
+                            <FormattedMessage id="create.group.indications" defaultMessage="Type a name and add at least 3 participants" /> 
+                        </p>
                         <br/>
-                        <input className="name-input" type="text" id="name" placeholder="Name of the group" autoComplete="off" ref={this.groupNameRef}/><br/>
+                        <FormattedMessage id="create.group.name" defaultMessage="Name of the group">
+                            { placeholder => <input className="name-input" type="text" id="name" placeholder={placeholder} autoComplete="off" ref={this.groupNameRef}/> }
+                        </FormattedMessage><br/>
                         <div className="user-list">
                             {
                                 (currentuser && currentuser.contacts) ? (
@@ -76,11 +82,15 @@ class ModalComponent extends Component{
                                         )
                                     })
                                 ):(
-                                    <h5>You don't have any contacts</h5>
+                                    <h5>
+                                        <FormattedMessage id="create.group.contacts.message" defaultMessage="You don't have any contacts" /> 
+                                    </h5>
                                 )
                             }
                         </div>
-                        <div className={ (this.state.participants.length > 2 && this.groupNameRef.current.value.length > 0) ? "modal-button enabled": "modal-button disabled" } onClick={this.createGroup}>Create Group</div>
+                        <div className={ (this.state.participants.length > 2 && this.groupNameRef.current.value.length > 0) ? "modal-button enabled": "modal-button disabled" } onClick={this.createGroup}>
+                            <FormattedMessage id="create.group.button" defaultMessage="Create Group" />
+                        </div>
                     </div>
                 </div>
             </div>

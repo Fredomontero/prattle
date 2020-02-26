@@ -1,7 +1,7 @@
 import React, {Component} from "react"
 import { retrieveUsers, addContact } from "../../redux/actions/user.actions";
 import { connect } from "react-redux";
-
+import { FormattedMessage } from 'react-intl';
 import "./users.component.css";
 
 class UsersComponent extends Component{
@@ -34,15 +34,23 @@ class UsersComponent extends Component{
         let { currentuser } = this.props;
         return(
             <div>
-                <input type="text" id="pattern" placeholder="Search users" ref={this.patternRef}/>
-                <input type="button" value="Search" onClick={ this.submitHandler }/>
-                <h1>Users</h1>
+                <FormattedMessage id="users.search.bar" defaultMessage="Search users">
+                    { placeholder => <input type="text" id="pattern" placeholder={placeholder} ref={this.patternRef}/> }
+                </FormattedMessage>
+                <FormattedMessage id="users.search.button" defaultMessage="Search">
+                    { value => <input type="button" value={value} onClick={ this.submitHandler }/> }
+                </FormattedMessage>
+                <h1>
+                    <FormattedMessage id="users.title" defaultMessage="Users" />
+                </h1>
                 <div className="users-container">
                 {console.log("currentUser: ", currentuser)}
                 {console.log("tempData: ", this.props.tempData)}
                 {
                     (!this.props.tempData)?(
-                        <h2>There are no contacts...</h2>
+                        <h2>
+                            <FormattedMessage id="users.empty" defaultMessage="There are no contacts..." />
+                        </h2>
                     ):(
                         this.props.tempData.filter( user => user._id !== currentuser._id && !this.props.contacts.includes(user._id))
                         .map(user => {
@@ -51,7 +59,9 @@ class UsersComponent extends Component{
                                     <img className="profile-picture" src="https://cdn3.iconfinder.com/data/icons/rcons-user-action/32/boy-512.png" alt="user_icon"/>
                                     <h3>{user.fullname}</h3>
                                     <h3>{user.email}</h3>
-                                    <input className="add-buton" type="button" value="Add" onClick={ () => this.addcontactHandler(user._id, user.fullname) }/>
+                                    <FormattedMessage id="user.add.button" defaultMessage="Add">
+                                        { value => <input className="add-buton" type="button" value={value} onClick={ () => this.addcontactHandler(user._id, user.fullname) }/> }
+                                    </FormattedMessage>
                                 </div>
                             )
                         })

@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import { connect } from "react-redux";
 import { createUserRequest } from "../../redux/actions/user.actions";
 import './signup-page.css';
+import { FormattedMessage } from 'react-intl';
 
 class SignupPage extends Component {
 
@@ -34,13 +35,25 @@ class SignupPage extends Component {
     render(){
         return(
             <div className="signup-container">
-                <h1>Sign up</h1>
+                <h1>
+                    <FormattedMessage id="signup.header" defaultMessage="Sign up" />
+                </h1>
                 <form className="signup-form">
-                    <input type="text" id="fullname" placeholder="Fullname" ref={this.fullnameRef}/>
-                    <input type="email" id="email" placeholder="Email" ref={this.emailnameRef}/>
-                    <input type="password" id="password" placeholder="Password" ref={this.passwordRef}/>
-                    <input type="password" id="passwordConfirmation" placeholder="Confirm password" ref={this.passwordConfirmationRef}/>
-                    <input type="button" value="Sign up" onClick={ this.submitHandler }/>
+                    <FormattedMessage id="signup.fullname" defaultMessage="Fullname">
+                        { placeholder => <input type="text" id="fullname" placeholder={placeholder} ref={this.fullnameRef}/> }
+                    </FormattedMessage>
+                    <FormattedMessage id="signup.email" defaultMessage="Email">
+                        { placeholder => <input type="email" id="email" placeholder={placeholder} ref={this.emailnameRef}/> }
+                    </FormattedMessage>
+                    <FormattedMessage id="signup.password" defaultMessage="Password">
+                        { placeholder => <input type="password" id="password" placeholder={placeholder} ref={this.passwordRef}/> }
+                    </FormattedMessage>
+                    <FormattedMessage id="signup.confirm.password" defaultMessage="Confirm password">
+                        { placeholder => <input type="password" id="passwordConfirmation" placeholder={placeholder} ref={this.passwordConfirmationRef}/> }
+                    </FormattedMessage>
+                    <FormattedMessage id="signup.button" defaultMessage="Sign up">
+                        { value => <input type="button" value={value} onClick={ this.submitHandler }/> }
+                    </FormattedMessage>
             </form>
             </div>
         )

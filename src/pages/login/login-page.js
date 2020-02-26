@@ -57,9 +57,15 @@ class LoginPage extends Component {
                             />
                         </h1>
                         <form className="signup-form">
-                            <input type="email" id="email" placeholder="Email" ref={this.emailRef}/>
-                            <input type="password" id="password" placeholder="Password" ref={this.passwordRef}/>
-                            <input type="button" value="Login" onClick={ this.submitHandler }/>
+                            <FormattedMessage id="login.email" defaultMessage="Email">
+                                { placeholder => <input type="email" id="email" placeholder={placeholder} ref={this.emailRef}/> }
+                            </FormattedMessage>
+                            <FormattedMessage id="login.password" defaultMessage="Password">
+                                { placeholder => <input type="password" id="password" placeholder={placeholder} ref={this.passwordRef}/> }
+                            </FormattedMessage>
+                            <FormattedMessage id="login.button" defaultMessage="Login">
+                                { value => <input type="button" value={value} onClick={ this.submitHandler }/> }
+                            </FormattedMessage>
                     </form>
                 </div>
             </div>

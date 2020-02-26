@@ -2,7 +2,7 @@ import React, {Component} from "react"
 import { connect } from "react-redux";
 import { sendMessage, loadMessages, saveMessage, selectConversation } from "../../redux/actions/message.actions";
 import { ObjectID } from '../../utils/utils';
-
+import { FormattedMessage } from 'react-intl';
 import "./chat.component.css";
 
 class ChatComponent extends Component{
@@ -45,10 +45,14 @@ class ChatComponent extends Component{
         return(
             <div className="chat-component-container">
                 <div className="my-contacts">
-                    <h3>My Conversations</h3>
+                    <h3>
+                        <FormattedMessage id="conversations.title" defaultMessage="My Conversations" />
+                    </h3>
                         {
                             ((!this.props.currentuser.conversations) || (this.props.currentuser.conversations.length === 0)) ? (
-                                <h4>You don't have any conversations</h4> 
+                                <h4>
+                                    <FormattedMessage id="conversations.empty" defaultMessage="You don't have any conversations" />
+                                </h4> 
                             ):(
                                 this.props.currentuser.conversations.map( conversation => {
                                     return(
@@ -80,14 +84,18 @@ class ChatComponent extends Component{
                                     )
                                 })
                             ):(
-                                <h2>No Messages</h2>
+                                <h2>
+                                    <FormattedMessage id="messages.empty" defaultMessage="No Messages" />
+                                </h2>
                             )
                         )
                     }
                     </div>
                     <div className="input-container">
                         <input className="message-input" type="text" ref={ this.messageRef }/>
-                        <input className="button-input" type="button" value="send" onClick={this.handleMessage}/>
+                        <FormattedMessage id="chat.button" defaultMessage="Send">
+                            { value => <input className="button-input" type="button" value={value} onClick={this.handleMessage}/> }
+                        </FormattedMessage>
                     </div>
                 </div>
             </div>

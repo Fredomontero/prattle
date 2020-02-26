@@ -9,6 +9,7 @@ import NotificationsComponent from "../../components/notifications/notifications
 import ModalComponent from "../../components/modal/modal.component"
 import { MdChatBubble, MdPersonAdd, MdSettings, MdPowerSettingsNew, MdNotifications, MdSentimentSatisfied } from "react-icons/md";
 
+import { FormattedMessage } from 'react-intl';
 
 class DashboardPage extends Component{
     constructor(props){
@@ -43,8 +44,8 @@ class DashboardPage extends Component{
             <div>
                 {/* NAVBAR */}
                 <div className="navbar">
-                    <h1>Dashboard  <span role="img" aria-label="doggie">&#128021;</span></h1>
-                    <h3 className="welcome">Welcome { this.props.loggedIn.fullname }</h3>
+                    <h1><FormattedMessage id="dashboard.title" defaultMessage="Dashboard" /><span role="img" aria-label="doggie">&#128021;</span></h1>
+                    <h3 className="welcome"><FormattedMessage id="dashboard.welcome" defaultMessage="Welcome" /> { this.props.loggedIn.fullname }</h3>
                 </div>
                 <div className="dashboard-container">
                 <div className="sidebar">
