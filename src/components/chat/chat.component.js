@@ -22,6 +22,7 @@ class ChatComponent extends Component{
         var author = currentuser.fullname;
         var messageID = ObjectID();
         // console.log("The message Id is: ", messageID)
+        this.messageRef.current.value = "";
         saveMessage( messageID, this.state.chatId, author, text, date );
         sendMessage( messageID, author, text, date, this.state.chatId );
     }
@@ -91,12 +92,16 @@ class ChatComponent extends Component{
                         )
                     }
                     </div>
-                    <div className="input-container">
-                        <input className="message-input" type="text" ref={ this.messageRef }/>
-                        <FormattedMessage id="chat.button" defaultMessage="Send">
-                            { value => <input className="button-input" type="button" value={value} onClick={this.handleMessage}/> }
-                        </FormattedMessage>
-                    </div>
+                    {
+                        (this.state.chatId === null)?(<br/>):(
+                            <div className="input-container">
+                                <input className="message-input" type="text" ref={ this.messageRef }/>
+                                <FormattedMessage id="chat.button" defaultMessage="Send">
+                                    { value => <input className="button-input" type="button" value={value} onClick={this.handleMessage}/> }
+                                </FormattedMessage>
+                            </div>       
+                        )
+                    }
                 </div>
             </div>
         )

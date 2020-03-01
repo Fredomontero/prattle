@@ -125,3 +125,8 @@ export const createGroupRequest = data => ({
     type: "CREATE_GROUP_REQUEST",
     payload: data
 });
+
+export const changeRoute = data => ({
+    type: "CHANGE_ROUTE_REQUEST",
+    payload: data
+});

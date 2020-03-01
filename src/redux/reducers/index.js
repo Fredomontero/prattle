@@ -3,7 +3,8 @@ const initialState = {
     error: null,
     tempData: null,
     messages: null,
-    chatId: null
+    chatId: null,
+    route: null
 };
 
 function rootReducer(state = initialState, action){
@@ -119,6 +120,11 @@ function rootReducer(state = initialState, action){
             return{
                 ...state,
                 error: null
+            }
+        case "CHANGE_ROUTE_REQUEST":
+            return{
+                ...state,
+                route:action.payload
             }
         default:
             return state;

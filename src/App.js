@@ -18,8 +18,6 @@ class App extends Component{
     // console.log("LoggedIn: ", this.props.loggedIn);
     const { getUser } = this.props;
     getUser();
-    
-
   }
 
   render(){
@@ -39,7 +37,16 @@ class App extends Component{
             } 
           />
           {/* SIGNUP PAGE ROUTE */}
-          <Route path="/signup" component={ SignupPage }/>
+          <Route 
+            path="/signup" 
+            render = { () => 
+              (this.props.loggedIn !== null) ? (
+                <Redirect from="/" to="dashboard"/>
+              ):(
+                <SignupPage/>
+              )
+            }
+          />
           {/* LOGIN PAGE ROUTE */}
           <Route 
             path="/login"  

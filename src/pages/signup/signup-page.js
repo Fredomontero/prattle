@@ -1,20 +1,21 @@
 import React, { Component } from 'react';
 import { connect } from "react-redux";
 import { createUserRequest } from "../../redux/actions/user.actions";
+import { changeRoute } from "../../redux/actions/user.actions";
 import './signup-page.css';
 import { FormattedMessage } from 'react-intl';
+import { Redirect } from 'react-router-dom';
 
 class SignupPage extends Component {
 
     constructor(props){
         super(props);
-
         this.fullnameRef = React.createRef();
         this.emailnameRef = React.createRef();
         this.passwordRef = React.createRef();
         this.passwordConfirmationRef = React.createRef();
-
     }
+
 
     submitHandler = (event) => {
         event.preventDefault();
@@ -31,8 +32,18 @@ class SignupPage extends Component {
 
         createUserRequest(fullname, email, password);
     }
+
+    routeChange = () => {
+        const { changeRoute } = this.props;
+        changeRoute("home");
+    }
     
     render(){
+        let { route } = this.props;
+        if (route && route.route !== "signup") {
+            return <Redirect to='/login' />
+        }
+
         return(
             <div className="signup-container">
                 <h1>
@@ -54,14 +65,27 @@ class SignupPage extends Component {
                     <FormattedMessage id="signup.button" defaultMessage="Sign up">
                         { value => <input type="button" value={value} onClick={ this.submitHandler }/> }
                     </FormattedMessage>
-            </form>
+                </form>
+                <p className="signin-message" onClick={this.routeChange}>
+                    <FormattedMessage
+                        id="signup.signin"
+                        defaultMessage="Sign In" 
+                    />
+                </p>
+
             </div>
         )
     }
 }
 
 const mapDispatchToProps = dispatch => ({
-    createUserRequest: (fullname, email, password) => dispatch(createUserRequest({fullname, email, password}))
-})
+    createUserRequest: (fullname, email, password) => dispatch(createUserRequest({fullname, email, password})),
+    changeRoute: (route) => dispatch(changeRoute({route}))
+});
 
-export default connect(null, mapDispatchToProps)(SignupPage);
+const mapStateToProps = (state) => {
+    const { route } = state;
+    return { route: route }
+};
+
+export default connect(mapStateToProps, mapDispatchToProps)(SignupPage);

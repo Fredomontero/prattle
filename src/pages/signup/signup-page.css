@@ -22,3 +22,9 @@
     color: #fff;
     font-size: 17px;
 }
+
+.signin-message{
+    font-weight: 200;
+    cursor: pointer;
+    display: inline-flex;
+}

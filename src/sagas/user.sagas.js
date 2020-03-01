@@ -1,5 +1,6 @@
 import { takeEvery, put, all, call, select} from "redux-saga/effects";
 import { 
+    logIn,
     loginSuccess, 
     loginFailure, 
     userCreated, 
@@ -79,6 +80,7 @@ export function* onSignIn(){
 export function* createUser(action){
 
     //Sending data to the Auth server
+    let {email, password} = action.payload;
     let requestBodyAuth = {
         query: `
             mutation{
@@ -133,10 +135,7 @@ export function* createUser(action){
             if(resBackend.errors){
                 yield put(failToCreateUser(resBackend.errors[0].message));
             }else{
-                console.log(result);
-                yield put(
-                    userCreated(resBackend.data)
-                )
+                yield put(logIn({email, password}));
             }
         }
     }catch(error){
@@ -215,7 +214,6 @@ export function* logout(){
     try{
         let res = yield call(fetch, 'http://localhost:4000/graphql', logoutOptions);
         let resData = yield res.json();
-        console.log("resData on logout: ", resData);
         if(resData.errors){
             yield put(logoutFailure(resData.errors[0].message));
         }else{
@@ -335,7 +333,6 @@ export function* retrieveUsers(action){
     try{
         let res = yield call(fetch, 'http://localhost:4001/graphql', retrieveUsersOptions);
         let usersData = yield res.json();
-        // console.log("usersData: ", usersData);
         if(usersData.errors){
             yield put(retrieveUsersFailure(usersData.errors[0].message));
         }else{
@@ -399,7 +396,6 @@ export function* addContactRequest(action){
     try{
         let res = yield call(fetch, 'http://localhost:4001/graphql', addContactOptions);
         let resData = yield res.json();
-        console.log(resData);
         if(resData.errors){
             yield put(addContactFailure(resData.errors[0].message));
         }else{
@@ -464,7 +460,6 @@ export function* resolveFriendshipRequest(action){
     try{
         let res = yield call(fetch, 'http://localhost:4001/graphql', handleFriendshipRequestOptions);
         let resData = yield res.json();
-        // console.log(resData);
         if(resData.errors){
             yield put(handleRequestFailure(resData.errors[0].message));
         }else{
@@ -525,8 +520,6 @@ export function* onLoadMessages(){
 }
 
 export function* saveMessage(action){
-    console.log("SAVE MESSAGE");
-    console.log(action);
     //Sending data to the Auth server
     let saveMessageBody = {
         query: `

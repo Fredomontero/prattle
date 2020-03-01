@@ -1,7 +1,9 @@
 import React, { Component } from 'react';
 import { connect } from "react-redux";
-import { logIn } from "../../redux/actions/user.actions";
+import { logIn, changeRoute } from "../../redux/actions/user.actions";
 import { ContextConsumer } from "../../components/IntlWrapper/IntlWrapper.component";
+import { Redirect } from 'react-router-dom';
+
 import './login-page.css';
 
 import { FormattedMessage } from 'react-intl';
@@ -10,14 +12,13 @@ class LoginPage extends Component {
 
     constructor(props){
         super(props);
-        
         this.emailRef = React.createRef();
         this.passwordRef = React.createRef();
-
     }
 
-    componentDidMount(){
-        // console.log("On loginPage");
+    routeChange = () => {
+        const { changeRoute } = this.props;
+        changeRoute("signup");
     }
 
     submitHandler = (event) => {
@@ -35,6 +36,10 @@ class LoginPage extends Component {
     }
     
     render(){
+        let { route } = this.props;
+        if (route && route.route === "signup") {
+            return <Redirect to='/signup' />
+        }
         return(
             <div>
                 <ContextConsumer>
@@ -67,6 +72,12 @@ class LoginPage extends Component {
                                 { value => <input type="button" value={value} onClick={ this.submitHandler }/> }
                             </FormattedMessage>
                     </form>
+                    <p className="need-account" onClick={this.routeChange}>
+                        <FormattedMessage
+                            id="login.need.account"
+                            defaultMessage="Need an account?" 
+                        />
+                    </p>
                 </div>
             </div>
         )
@@ -74,7 +85,13 @@ class LoginPage extends Component {
 }
 
 const mapDispatchToProps = dispatch => ({
-    logIn: (email, password) => dispatch(logIn({email, password}))
-})
+    logIn: (email, password) => dispatch(logIn({email, password})),
+    changeRoute: (route) => dispatch(changeRoute({route}))
+});
 
-export default connect(null, mapDispatchToProps)(LoginPage);
+const mapStateToProps = (state) => {
+    const { route } = state;
+    return { route: route }
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(LoginPage);
