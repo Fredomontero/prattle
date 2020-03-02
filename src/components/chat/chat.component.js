@@ -1,5 +1,6 @@
 import React, {Component} from "react"
 import { connect } from "react-redux";
+import { getConversationsRequest } from "../../redux/actions/user.actions";
 import { sendMessage, loadMessages, saveMessage, selectConversation } from "../../redux/actions/message.actions";
 import { ObjectID } from '../../utils/utils';
 import { FormattedMessage } from 'react-intl';
@@ -13,6 +14,12 @@ class ChatComponent extends Component{
             chatId: null,
             messages: []
          };
+    }
+
+    componentDidMount(){
+        const { getConversationsRequest, currentuser } = this.props;
+        let userId = (currentuser._id) ? currentuser._id : currentuser.userId;
+        getConversationsRequest(userId);
     }
 
     handleMessage = () => {
@@ -120,7 +127,8 @@ const mapDispatchToProps = dispatch => ({
     sendMessage: (_id, author, text, date, conversationId) => dispatch(sendMessage({ _id, author, text, date, conversationId })),
     loadMessages: (conversationId) => dispatch(loadMessages({conversationId})),
     saveMessage: (_id, conversationId, author, text, date) => dispatch(saveMessage({_id, conversationId ,author, text, date })),
-    selectConversation: (conversationId) => dispatch(selectConversation({conversationId}))
+    selectConversation: (conversationId) => dispatch(selectConversation({conversationId})),
+    getConversationsRequest: (_id) => dispatch(getConversationsRequest({_id}))
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(ChatComponent);

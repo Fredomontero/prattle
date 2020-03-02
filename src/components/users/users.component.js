@@ -22,8 +22,10 @@ class UsersComponent extends Component{
         retrieveUsers(pattern);
     }
 
-    addcontactHandler = (id, fullname) => {
+    addcontactHandler = (e, id, fullname) => {
         const { addContact } = this.props;
+        e.target.className = "add-button-disabled";
+        e.target.disabled = true;
         console.log("Current user data: ", this.props.currentuser._id + " " + this.props.currentuser.fullname);
         console.log("Target User: ", id + " " + fullname  )
         addContact(this.props.currentuser._id, this.props.currentuser.fullname, id, fullname);
@@ -60,7 +62,7 @@ class UsersComponent extends Component{
                                     <h3>{user.fullname}</h3>
                                     <h3>{user.email}</h3>
                                     <FormattedMessage id="user.add.button" defaultMessage="Add">
-                                        { value => <input className="add-buton" type="button" value={value} onClick={ () => this.addcontactHandler(user._id, user.fullname) }/> }
+                                        { value => <input className="add-buton" type="button" value={value} onClick={ (e) => this.addcontactHandler(e, user._id, user.fullname) }/> }
                                     </FormattedMessage>
                                 </div>
                             )

@@ -24,3 +24,11 @@
 .users-container{
     overflow-y: scroll;
 }
+
+.add-button-disabled{
+    background-color: rgba(1, 65, 20, 0.5);
+    color: #fff;
+    font-size: 18px;
+    width: 40%;
+    cursor: pointer;
+}

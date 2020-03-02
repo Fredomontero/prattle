@@ -1,11 +1,16 @@
 import "./notifications.component.css";
 import React, { Component } from "react";
 import { connect } from "react-redux";
-import { handleRequest } from "../../redux/actions/user.actions";
+import { handleRequest, loadProfile } from "../../redux/actions/user.actions";
 
 import { FormattedMessage } from 'react-intl';
 
 class NotificationsComponent extends Component{
+
+    componentDidMount(){
+        const { loadProfile, currentUser } = this.props;
+        loadProfile(currentUser._id);
+    }
 
     friendshipRequestHandler(value, requestId, sourceId, sourceName, targetId, targetName){
         const { handleRequest } = this.props;
@@ -74,7 +79,8 @@ function mapStateToProps(state){
 }
 
 const mapDispatchToProps = dispatch => ({
-    handleRequest: (value, requestId, sourceId, sourceName, targetId, targetName) => dispatch(handleRequest({value, requestId, sourceId, sourceName, targetId, targetName}))
+    handleRequest: (value, requestId, sourceId, sourceName, targetId, targetName) => dispatch(handleRequest({value, requestId, sourceId, sourceName, targetId, targetName})),
+    loadProfile:(userId) => dispatch(loadProfile(userId))
   })
 
 export default connect(mapStateToProps, mapDispatchToProps)(NotificationsComponent);

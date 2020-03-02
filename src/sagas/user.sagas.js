@@ -18,6 +18,8 @@ import {
     handleRequestSuccess,
     handleRequestFailure,
     loadSocket,
+    getConversationsSuccess,
+    getConversationsFailure
 } from "../redux/actions/user.actions";
 
 import {
@@ -650,6 +652,61 @@ export function* onCreateGroupRequest(){
     yield takeEvery("CREATE_GROUP_REQUEST", createGroupListener)
 }
 
+export function* getConversations(action){
+    console.log("THE PAYLOAD IS: ", action.payload);
+
+    let getConversationsRequestBody = {
+        query: `
+            query {
+                getConversations(userId: "${action.payload._id}"){
+                    _id
+                    name
+                    participants{
+                        _id
+                        name
+                        addedAt
+                    }
+                    createdAt
+                    lastMessageAt
+                }
+            }
+        `
+    };
+
+    // console.log("QUERY CREATE GROUP");
+    // console.log(createGroupRequestBody.query);
+    
+    let getConversationsRequestOptions = {
+        method: 'POST',
+        body: JSON.stringify(getConversationsRequestBody),
+        credentials: "include",
+        headers: {
+            'Content-Type': 'application/json'
+        }
+    }
+
+    try{
+        let res = yield call(fetch, 'http://localhost:4001/graphql', getConversationsRequestOptions);
+        let resData = yield res.json();
+        console.log(resData);
+        if(resData.errors){
+            yield put(getConversationsFailure(resData.errors[0].message));
+        }else{
+            yield put(
+                getConversationsSuccess(resData.data.getConversations )
+            )
+            // console.log("The conversations are: ", resData.data.getConversations);
+        }
+    }catch(error){
+        yield put(getConversationsFailure(error));
+    }
+
+}
+
+export function* onGetConversationsRequest(){
+    yield takeEvery("GET_CONVERSATIONS_REQUEST", getConversations)
+}
+
 //---------------------------------------------------------------
 
 export function* userSagas(){
@@ -664,6 +721,7 @@ export function* userSagas(){
                call(onLoadMessages),
                call(onSaveMessage),
                call(onUpdateMessagesRequest),
-               call(onCreateGroupRequest)
+               call(onCreateGroupRequest),
+               call(onGetConversationsRequest)
             ]);
 }

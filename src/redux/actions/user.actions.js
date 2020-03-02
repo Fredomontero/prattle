@@ -130,3 +130,18 @@ export const changeRoute = data => ({
     type: "CHANGE_ROUTE_REQUEST",
     payload: data
 });
+
+export const getConversationsRequest = data => ({
+    type: "GET_CONVERSATIONS_REQUEST",
+    payload: data
+});
+
+export const getConversationsSuccess = conversations => ({
+    type: "GET_CONVERSATIONS_SUCCESS",
+    payload: conversations
+});
+
+export const getConversationsFailure = error => ({
+    type: "GET_CONVERSATIONS_FAILURE",
+    payload: error
+});

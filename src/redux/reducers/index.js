@@ -126,6 +126,19 @@ function rootReducer(state = initialState, action){
                 ...state,
                 route:action.payload
             }
+        case "GET_CONVERSATIONS_SUCCESS":
+            return{
+                ...state,
+                error: null
+            }
+        case "GET_CONVERSATIONS_FAILURE":
+            return{
+                ...state,
+                loggedIn: {
+                    ...state.loggedIn,
+                    conversations: action.payload
+                }
+            }
         default:
             return state;
     }
