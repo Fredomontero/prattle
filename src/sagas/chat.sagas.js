@@ -2,7 +2,9 @@ import { put, call, take, fork } from "redux-saga/effects";
 import { updateMessagesRequest } from "../redux/actions/message.actions";
 import { eventChannel } from 'redux-saga';
 import io from 'socket.io-client';
-const url = 'http://localhost:4001';
+
+// const url = 'http://localhost:4001'; //Development
+const url = '/socket/';  //Production
 
 //This functions loads and returns the socket
 const connect = () => {

@@ -3,7 +3,6 @@ import {
     logIn,
     loginSuccess, 
     loginFailure, 
-    userCreated, 
     failToCreateUser, 
     fetchUserFailure, 
     fetchUserSuccess,
@@ -35,6 +34,12 @@ import {
 
 import { getChatId } from '../selectors/selectors';
 
+// const auth_url = 'http://localhost:4000/graphql';  //Development
+// const auth_url = '/auth_url/';  //Production
+// const chat_url = 'http://localhost:4001/graphql'; //Development
+// const chat_url = '/chat_url/'; //Production
+// const messages_url = 'http://localhost:4002/graphql'; //Development
+// const messages_url = '/messages_url/'; //Production
 
 export function* loginWithEmail(action){
     var email = (action) ? action.payload.email : "";
@@ -60,7 +65,7 @@ export function* loginWithEmail(action){
     };
 
     try{
-        let res = yield call(fetch, 'http://localhost:4000/graphql', loginRequestOptions);
+        let res = yield call(fetch, auth_url, loginRequestOptions);
         let resData = yield res.json();
         // console.log("ResData: ", resData);
         if(resData.errors){
@@ -98,7 +103,7 @@ export function* createUser(action){
     }
 
     try{
-        let res = yield fetch('http://localhost:4000/graphql', {
+        let res = yield fetch(auth_url, {
             method: 'POST',
             body: JSON.stringify(requestBodyAuth),
             headers: {
@@ -126,7 +131,7 @@ export function* createUser(action){
                     }
                 `
             }
-            let resBackend = yield fetch('http://localhost:4001/graphql', {
+            let resBackend = yield fetch(chat_url, {
                 method: 'POST',
                 body: JSON.stringify(requestBody),
                 headers: {
@@ -173,7 +178,7 @@ export function* fetchUser(){
     };
 
     try{
-        let res = yield call(fetch, 'http://localhost:4000/graphql', fetchUserRequestOptions);
+        let res = yield call(fetch, auth_url, fetchUserRequestOptions);
         let resData = yield res.json();
         // console.log("gotUser? : ", resData);
         if(resData.errors){
@@ -214,7 +219,7 @@ export function* logout(){
     };
 
     try{
-        let res = yield call(fetch, 'http://localhost:4000/graphql', logoutOptions);
+        let res = yield call(fetch, auth_url, logoutOptions);
         let resData = yield res.json();
         if(resData.errors){
             yield put(logoutFailure(resData.errors[0].message));
@@ -287,7 +292,7 @@ export function* loadProfile(action){
     };
 
     try{
-        let res = yield call(fetch, 'http://localhost:4001/graphql', loadProfileOptions);
+        let res = yield call(fetch, chat_url, loadProfileOptions);
         let userData = yield res.json();
         if(userData.errors){
             yield put(loadProfileFailure(userData.errors[0].message));
@@ -333,7 +338,7 @@ export function* retrieveUsers(action){
     };
 
     try{
-        let res = yield call(fetch, 'http://localhost:4001/graphql', retrieveUsersOptions);
+        let res = yield call(fetch, chat_url, retrieveUsersOptions);
         let usersData = yield res.json();
         if(usersData.errors){
             yield put(retrieveUsersFailure(usersData.errors[0].message));
@@ -396,7 +401,7 @@ export function* addContactRequest(action){
     };
 
     try{
-        let res = yield call(fetch, 'http://localhost:4001/graphql', addContactOptions);
+        let res = yield call(fetch, chat_url, addContactOptions);
         let resData = yield res.json();
         if(resData.errors){
             yield put(addContactFailure(resData.errors[0].message));
@@ -460,7 +465,7 @@ export function* resolveFriendshipRequest(action){
     };
 
     try{
-        let res = yield call(fetch, 'http://localhost:4001/graphql', handleFriendshipRequestOptions);
+        let res = yield call(fetch, chat_url, handleFriendshipRequestOptions);
         let resData = yield res.json();
         if(resData.errors){
             yield put(handleRequestFailure(resData.errors[0].message));
@@ -503,7 +508,7 @@ export function* loadMessagesRequest(action){
     };
 
     try{
-        let res = yield call(fetch, 'http://localhost:4002/graphql', loadMessagesOptions);
+        let res = yield call(fetch, messages_url, loadMessagesOptions);
         let messages = yield res.json();
         if(messages.errors){
             yield put(loadMessagesFailure(messages.errors[0].message));
@@ -551,7 +556,7 @@ export function* saveMessage(action){
         }
     }
     try{
-        let res = yield call(fetch, 'http://localhost:4002/graphql', saveMessageOptions);
+        let res = yield call(fetch, messages_url, saveMessageOptions);
         let message = yield res.json();
         console.log("The result in Message is: ", message);
         if(message.errors){
@@ -632,7 +637,7 @@ export function* createGroupListener(action){
     }
 
     try{
-        let res = yield call(fetch, 'http://localhost:4001/graphql', createGroupRequestOptions);
+        let res = yield call(fetch, chat_url, createGroupRequestOptions);
         let resData = yield res.json();
         console.log(resData);
         if(resData.errors){
@@ -686,7 +691,7 @@ export function* getConversations(action){
     }
 
     try{
-        let res = yield call(fetch, 'http://localhost:4001/graphql', getConversationsRequestOptions);
+        let res = yield call(fetch, chat_url, getConversationsRequestOptions);
         let resData = yield res.json();
         console.log(resData);
         if(resData.errors){
