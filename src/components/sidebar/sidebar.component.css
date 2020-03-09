@@ -1,0 +1,13 @@
+.sidebar-container{
+    background-color: #262f35;
+    color: #ffffff;
+    font-size: 18px;
+}
+
+.sidebar-item{
+    padding: 15px !important;
+}
+
+.sidebar-icon{
+    color: #ffffff;
+}

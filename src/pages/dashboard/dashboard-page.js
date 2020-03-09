@@ -6,10 +6,20 @@ import ChatComponent from "../../components/chat/chat.component";
 import SettingsComponent from "../../components/settings/settings.component";
 import UsersComponent from "../../components/users/users.component";
 import NotificationsComponent from "../../components/notifications/notifications.component";
+import SidebarComponent from "../../components/sidebar/sidebar.component";
 import ModalComponent from "../../components/modal/modal.component"
 import { MdChatBubble, MdPersonAdd, MdSettings, MdPowerSettingsNew, MdNotifications, MdSentimentSatisfied } from "react-icons/md";
+import Button from '@material-ui/core/Button';
+import { spacing } from '@material-ui/system';
+import { sizing } from '@material-ui/system';
+
 
 import { FormattedMessage } from 'react-intl';
+import { Grid } from '@material-ui/core';
+
+const section = {
+    height: "100px"
+};
 
 class DashboardPage extends Component{
     constructor(props){
@@ -41,42 +51,33 @@ class DashboardPage extends Component{
 
     render(){
         return(
-            <div>
-                {/* NAVBAR */}
+           <div className="main-container">
                 <div className="navbar">
                     <h1><FormattedMessage id="dashboard.title" defaultMessage="Dashboard" /><span role="img" aria-label="doggie">&#128021;</span></h1>
                     <h3 className="welcome"><FormattedMessage id="dashboard.welcome" defaultMessage="Welcome" /> { this.props.loggedIn.fullname }</h3>
                 </div>
-                <div className="dashboard-container">
-                <div className="sidebar">
-                    <ul>
-                        <li onClick={ () => this.setState({section: "notifications"}) } ><MdNotifications/></li>
-                        <li onClick={ () => this.setState({section: "chats"}) } ><MdChatBubble/></li>
-                        <li onClick={ () => this.setState({section: "users"}) } ><MdPersonAdd/></li>
-                        <li onClick={ () => this.setState({section: "settings"}) } ><MdSettings/></li>
-                        <li onClick={ this.submitHandler }><MdPowerSettingsNew/></li>
-                        <li onClick={ this.modalHandler } ><MdSentimentSatisfied/></li>
-                    </ul>
-                </div>
                 <div className="dashboard-body">
-                    {   (this.state.section === "chats") ? (
-                        <ChatComponent/>
-                    ):(
-                        (this.state.section === "users") ? (
-                            <UsersComponent/>
-                        ) : (
-                            (this.state.section === "settings") ? (
-                                <SettingsComponent/>
-                            ) : (
-                                <NotificationsComponent/>
+                    <div className="side-menu">
+                        <SidebarComponent/>
+                    </div>
+                    <div className="interactive-container">
+                        {   (this.props.dashboardTab === "chats") ? (
+                                <ChatComponent/>
+                            ):(
+                                (this.props.dashboardTab === "users") ? (
+                                    <UsersComponent/>
+                                ) : (
+                                    (this.props.dashboardTab === "settings") ? (
+                                        <SettingsComponent/>
+                                    ) : (
+                                        <NotificationsComponent/>
+                                    )
+                                    
+                                )
                             )
-                            
-                        )
-                    )
-                    }
+                        }
+                    </div>
                 </div>
-                </div>
-                {(this.state.modal === true) ? (<ModalComponent handler={this.modalHandler} />):(null)}
             </div>
         )
     }
@@ -88,8 +89,11 @@ const mapDispatchToProps = dispatch => ({
 })
 
 const mapStateToProps =(state) => {
-    const { loggedIn } = state;
-    return { loggedIn: loggedIn }
+    const { loggedIn, dashboardTab } = state;
+    return { 
+        loggedIn: loggedIn,
+        dashboardTab: dashboardTab
+    }
   }
 
 export default connect(mapStateToProps, mapDispatchToProps)(DashboardPage);

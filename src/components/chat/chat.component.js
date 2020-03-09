@@ -4,6 +4,14 @@ import { getConversationsRequest } from "../../redux/actions/user.actions";
 import { sendMessage, loadMessages, saveMessage, selectConversation } from "../../redux/actions/message.actions";
 import { ObjectID } from '../../utils/utils';
 import { FormattedMessage } from 'react-intl';
+import List from '@material-ui/core/List';
+import ListItem from '@material-ui/core/ListItem';
+import ListItemText from '@material-ui/core/ListItemText';
+import ListItemAvatar from '@material-ui/core/ListItemAvatar';
+import Avatar from '@material-ui/core/Avatar';
+import ImageIcon from '@material-ui/icons/Image';
+import Typography from '@material-ui/core/Typography';
+
 import "./chat.component.css";
 
 class ChatComponent extends Component{
@@ -56,6 +64,7 @@ class ChatComponent extends Component{
                     <h3>
                         <FormattedMessage id="conversations.title" defaultMessage="My Conversations" />
                     </h3>
+                    <List>
                         {
                             ((!this.props.currentuser.conversations) || (this.props.currentuser.conversations.length === 0)) ? (
                                 <h4>
@@ -64,14 +73,26 @@ class ChatComponent extends Component{
                             ):(
                                 this.props.currentuser.conversations.map( conversation => {
                                     return(
-                                        <div key={conversation._id} className={ (conversation._id === this.state.chatId) ? "conversation-container-active" : "conversation-container" } onClick={() => this.selectConversation(conversation._id)}>
-                                            <h4>{(conversation.name === 'noname') ? (this.getUser(conversation)):(conversation.name)}</h4> 
-                                            <h5>{conversation.createdAt}</h5> 
-                                        </div>
+                                        <ListItem key={conversation._id} className={ (conversation._id === this.state.chatId) ? "conversation-container-active" : "conversation-container" } onClick={() => this.selectConversation(conversation._id)}>
+                                            <ListItemAvatar>
+                                                <Avatar>
+                                                    <ImageIcon/>
+                                                </Avatar>
+                                            </ListItemAvatar>
+                                            <ListItemText
+                                            primary={(conversation.name === 'noname') ? (this.getUser(conversation)):(conversation.name)}
+                                            secondary={
+                                                <React.Fragment>
+                                                {conversation.createdAt}
+                                                </React.Fragment>
+                                            }
+                                            />
+                                        </ListItem>
                                     )
                                 })
                             )
                         }
+                    </List>    
                 </div>
                 <div className="chat-component">
                     <div className="chat-content">

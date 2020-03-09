@@ -4,7 +4,8 @@ const initialState = {
     tempData: null,
     messages: null,
     chatId: null,
-    route: null
+    route: null,
+    dashboardTab: "chats"
 };
 
 function rootReducer(state = initialState, action){
@@ -138,6 +139,11 @@ function rootReducer(state = initialState, action){
                     ...state.loggedIn,
                     conversations: action.payload
                 }
+            }
+        case "CHANGE_DASHBOARD_SECTION":
+            return{
+                ...state,
+                dashboardTab: action.payload.section
             }
         default:
             return state;

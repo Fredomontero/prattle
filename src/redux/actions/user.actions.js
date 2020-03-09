@@ -145,3 +145,8 @@ export const getConversationsFailure = error => ({
     type: "GET_CONVERSATIONS_FAILURE",
     payload: error
 });
+
+export const changeSection = section => ({
+    type: "CHANGE_DASHBOARD_SECTION",
+    payload: section
+});
