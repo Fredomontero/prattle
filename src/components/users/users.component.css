@@ -1,10 +1,41 @@
+.users-container{
+    padding: 15px;
+    height: calc(100%);
+    box-sizing: border-box;
+    overflow-y: hidden;
+}
+
+.users-container::-webkit-scrollbar {
+    display: none;
+}
+
+.users-header{
+    text-align: center;
+}
+
+.user-search{
+    width: 250px;
+    height: 35px;
+    box-sizing: border-box;
+    font-size: 17px;
+}
+
+.user-search-button{
+    height: 35px;
+    font-size: 17px;
+    background-color: #03a734;
+    border: 1px solid #03a734;
+    color: #ffffff;
+}
+
 .user-card{
     border: 1px solid #000;
     display: inline-block;
-    width: 15%;
+    width: 20%;
     margin: 1%;
     padding: 10px;
     text-align: center;
+    height: 280px;
 }
 
 .profile-picture{

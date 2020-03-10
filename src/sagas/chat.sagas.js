@@ -4,7 +4,7 @@ import { eventChannel } from 'redux-saga';
 import io from 'socket.io-client';
 
 // const url = 'http://localhost:4001'; //Development
-const url = '/socket/';  //Production
+// const url = '/socket/';  //Production
 
 //This functions loads and returns the socket
 const connect = () => {

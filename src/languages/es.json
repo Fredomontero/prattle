@@ -33,5 +33,10 @@
     "create.group.indications":"Escribe el nombre y añade al menos 3 participantes",
     "create.group.contacts.message":"No tienes contactos :(",
     "create.group.name":"Nombre del grupo",
-    "create.group.button":"Crear Grupo"
+    "create.group.button":"Crear Grupo",
+    "sidebar.notifications":"Notificaciones",
+    "sidebar.messages":"Mesnajes",
+    "sidebar.friends":"Amigos",
+    "sidebar.settings": "Configuración",
+    "sidebar.logout":"Cerrar Sesión"
 }
