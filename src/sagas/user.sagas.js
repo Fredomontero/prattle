@@ -138,7 +138,7 @@ export function* createUser(action){
                     'Content-Type': 'application/json'
                 }
             })
-            let result = yield resBackend.json();
+            yield resBackend.json();
             if(resBackend.errors){
                 yield put(failToCreateUser(resBackend.errors[0].message));
             }else{

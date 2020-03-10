@@ -8,14 +8,9 @@ import UsersComponent from "../../components/users/users.component";
 import NotificationsComponent from "../../components/notifications/notifications.component";
 import SidebarComponent from "../../components/sidebar/sidebar.component";
 import ModalComponent from "../../components/modal/modal.component"
-import { MdChatBubble, MdPersonAdd, MdSettings, MdPowerSettingsNew, MdNotifications, MdSentimentSatisfied } from "react-icons/md";
-import Button from '@material-ui/core/Button';
-import { spacing } from '@material-ui/system';
-import { sizing } from '@material-ui/system';
 
 
 import { FormattedMessage } from 'react-intl';
-import { Grid } from '@material-ui/core';
 
 const section = {
     height: "100px"
