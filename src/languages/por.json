@@ -38,5 +38,6 @@
     "sidebar.messages":"Mensagens",
     "sidebar.friends":"Amigos",
     "sidebar.settings": "Configurações",
-    "sidebar.logout":"Sair"
+    "sidebar.logout":"Sair",
+    "sidebar.group": "Criar grupo"
 }

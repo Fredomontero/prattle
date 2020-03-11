@@ -104,9 +104,8 @@ class ChatComponent extends Component{
                                         <div key={message._id} className="messageContainer">
                                             <div className={(message.author === this.props.currentuser.fullname) ? "sentMessagePosition" : "recievedMessagePosition"}>
                                                 <div className={(message.author === this.props.currentuser.fullname) ? " messageBubble sentMessageColor" : "messageBubble recievedMessageColor"}>
-                                                    <h5>Author: {message.author}</h5><br/>
-                                                    <h5>Text: {message.text}</h5><br/>
-                                                    <h5>Date: {message.createdAt}</h5>
+                                                    <p className="text_message">{message.text}</p><br/>
+                                                    <p className="date_message">{message.createdAt}</p>
                                                 </div>
                                             </div>
                                         </div>
