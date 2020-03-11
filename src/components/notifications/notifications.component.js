@@ -5,16 +5,11 @@ import Card from '@material-ui/core/Card';
 import CardActionArea from '@material-ui/core/CardActionArea';
 import CardContent from '@material-ui/core/CardContent';
 import CardMedia from '@material-ui/core/CardMedia';
-import { handleRequest, loadProfile } from "../../redux/actions/user.actions";
+import { handleRequest } from "../../redux/actions/user.actions";
 
 import { FormattedMessage } from 'react-intl';
 
 class NotificationsComponent extends Component{
-
-    componentDidMount(){
-        const { loadProfile, currentUser } = this.props;
-        loadProfile(currentUser._id);
-    }
 
     friendshipRequestHandler(value, requestId, sourceId, sourceName, targetId, targetName){
         const { handleRequest } = this.props;
@@ -113,8 +108,7 @@ function mapStateToProps(state){
 }
 
 const mapDispatchToProps = dispatch => ({
-    handleRequest: (value, requestId, sourceId, sourceName, targetId, targetName) => dispatch(handleRequest({value, requestId, sourceId, sourceName, targetId, targetName})),
-    loadProfile:(userId) => dispatch(loadProfile(userId))
+    handleRequest: (value, requestId, sourceId, sourceName, targetId, targetName) => dispatch(handleRequest({value, requestId, sourceId, sourceName, targetId, targetName}))
   })
 
 export default connect(mapStateToProps, mapDispatchToProps)(NotificationsComponent);

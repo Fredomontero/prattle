@@ -13,6 +13,17 @@
     border-collapse: collapse;
     flex-grow: 1;
     text-align: center;
+    max-height: 100%;
+    overflow-y: scroll;
+}
+
+.my-contacts::-webkit-scrollbar {
+    display: none;
+}
+
+.list-title{
+    padding: 10px 0 0 10px;
+    text-align: left;
 }
 
 .conversation-container{
@@ -47,17 +58,27 @@
 }
 
 .chat-content{
-   flex-grow: 11;
-   background-color: fff;
+   overflow-y: scroll;
+   height: 95%;
+}
+
+.chat-content::-webkit-scrollbar {
+    display: none;
 }
 
 .input-container{
-    flex-grow: 1;
     display: flex;
+    height: 5%;
+    background-color: rgb(190, 94, 110);
 }
 
 .input-container .message-input{
- flex-grow: 1;
+    flex-grow: 1;
+    font-size: 20px;
+    line-height: 20px;
+    vertical-align: bottom;
+    box-sizing: border-box;
+
 }
 
 .message-icon{
@@ -69,15 +90,11 @@
 }
 
 .messageBubble{
-    margin: 5px;
+    margin: 10px;
     border: 1px solid #000;
-    border-radius: 15px;
+    border-radius: 0px;
     display: inline-block;
-}
-
-.messageBubble h5{
-    margin: 5px;
-    display: inline-block;
+    padding: 10px;
 }
 
 .sentMessagePosition{
@@ -91,13 +108,24 @@
 }
 
 .sentMessageColor{
-    background-color: #dbf5ff;
+    background-color: rgba(219, 245, 255, 0.5);
 }
 
 .recievedMessageColor{
-    background-color: #fff5ee;
+    background-color: rgba(255, 245, 238, 0.5);
 }
 
 .conversation-date{
     display: block;
+}
+
+.text_message{
+    font-size: 20px;
+    margin: 0px;
+}
+
+.date_message{
+    font-size: 12px;
+    color: #747373;
+    margin: 0px;
 }

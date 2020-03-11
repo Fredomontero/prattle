@@ -39,5 +39,6 @@
 
 .dashboard-body{
     background-color: #e52b50;
-    height: calc(100% - 98px);
+    height: calc(100% - 90px);
+    box-sizing: content-box;
 }

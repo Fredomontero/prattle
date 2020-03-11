@@ -12,14 +12,9 @@ import ModalComponent from "../../components/modal/modal.component"
 
 import { FormattedMessage } from 'react-intl';
 
-const section = {
-    height: "100px"
-};
-
 class DashboardPage extends Component{
     constructor(props){
         super(props);
-        // console.log("Dashboard Component");
         this.state = {
             section: "chats",
             modal: false
@@ -29,10 +24,6 @@ class DashboardPage extends Component{
     componentDidMount(){
         const { loadProfile } = this.props;
         loadProfile(this.props.loggedIn.userId);
-        // console.log(this.props.loggedIn);
-        // console.log("The fullname before loading socket is: ", this.props.loggedIn.fullname);
-        // loadSocket(this.props.loggedIn.fullname);
-        // this.socket = io('http://localhost:4001');
     }
 
     submitHandler = () => {
@@ -41,6 +32,7 @@ class DashboardPage extends Component{
     }
 
     modalHandler = () => {
+        console.log("Inside modalHandler");
         this.setState({modal: !this.state.modal});
     }
 
@@ -53,7 +45,7 @@ class DashboardPage extends Component{
                 </div>
                 <div className="dashboard-body">
                     <div className="side-menu">
-                        <SidebarComponent/>
+                        <SidebarComponent handler = {this.modalHandler}/>
                     </div>
                     <div className="interactive-container">
                         {   (this.props.dashboardTab === "chats") ? (
@@ -73,6 +65,7 @@ class DashboardPage extends Component{
                         }
                     </div>
                 </div>
+                {(this.state.modal === true) ? (<ModalComponent handler={this.modalHandler} />):(null)}
             </div>
         )
     }

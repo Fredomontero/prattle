@@ -38,5 +38,6 @@
     "sidebar.messages":"Mesnajes",
     "sidebar.friends":"Amigos",
     "sidebar.settings": "Configuración",
-    "sidebar.logout":"Cerrar Sesión"
+    "sidebar.logout":"Cerrar Sesión",
+    "sidebar.group": "Crear Grupo"
 }

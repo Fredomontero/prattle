@@ -8,12 +8,20 @@ import ChatBubbleIcon from '@material-ui/icons/ChatBubble';
 import PersonAddIcon from '@material-ui/icons/PersonAdd';
 import SettingsIcon from '@material-ui/icons/Settings';
 import ExitToAppIcon from '@material-ui/icons/ExitToApp';
+import GroupIcon from '@material-ui/icons/Group';
 import Badge from '@material-ui/core/Badge';
 import './sidebar.component.css';
 import { connect } from "react-redux";
 import { changeSection, logout } from "../../redux/actions/user.actions";
 
 class SidebarComponent extends Component{
+
+    constructor(props){
+        super(props);
+        this.state={
+            modal: false
+        }
+    }
 
     submitHandler = () => {
         const { logout } = this.props;
@@ -30,12 +38,16 @@ class SidebarComponent extends Component{
         return(
             <List className="sidebar-container">
                 <ListItem className="sidebar-item" button onClick={ () => this.changeConversationHandler('notifications') }>
-                    <ListItemIcon><Badge badgeContent={4} color="secondary"> <NotificationsIcon className="sidebar-icon"/> </Badge></ListItemIcon>
+                    <ListItemIcon><Badge badgeContent={1} color="secondary"> <NotificationsIcon className="sidebar-icon"/> </Badge></ListItemIcon>
                     <FormattedMessage id="sidebar.notifications" defaultMessage="Notifications" />
                 </ListItem>
                 <ListItem className="sidebar-item" button onClick={ () => this.changeConversationHandler('chats') }>
-                    <ListItemIcon><Badge badgeContent={4} color="secondary"> <ChatBubbleIcon className="sidebar-icon"/> </Badge></ListItemIcon>
+                    <ListItemIcon><Badge badgeContent={1} color="secondary"> <ChatBubbleIcon className="sidebar-icon"/> </Badge></ListItemIcon>
                     <FormattedMessage id="sidebar.messages" defaultMessage="Messages" />
+                </ListItem>
+                <ListItem className="sidebar-item" button onClick = {this.props.handler}>
+                    <ListItemIcon><GroupIcon className="sidebar-icon"/></ListItemIcon>
+                    <FormattedMessage id="sidebar.group" defaultMessage="Create Group" />
                 </ListItem>
                 <ListItem className="sidebar-item" button onClick={ () => this.changeConversationHandler('users') }>
                     <ListItemIcon><PersonAddIcon className="sidebar-icon"/></ListItemIcon>

@@ -111,7 +111,7 @@ export function* createUser(action){
             }
         })
         let resData = yield res.json();
-        console.log(resData);
+        // console.log(resData);
         if(resData.errors){
             yield put(failToCreateUser(resData.errors[0].message));
         }else{
@@ -357,7 +357,7 @@ export function* onRetrieveUsers(){
 }
 
 export function* addContactRequest(action){
-    console.log("Inside addContactRequest Saga");
+    // console.log("Inside addContactRequest Saga");
     let addContactBody = {
         query: `
             mutation{
@@ -558,7 +558,7 @@ export function* saveMessage(action){
     try{
         let res = yield call(fetch, messages_url, saveMessageOptions);
         let message = yield res.json();
-        console.log("The result in Message is: ", message);
+        // console.log("The result in Message is: ", message);
         if(message.errors){
             yield put(saveMessageFailure(message.errors[0].message));
         }else{
@@ -591,7 +591,7 @@ export function* onSaveMessage(){
 export function* updateMessagesListener(action){
     let chatId = yield select(getChatId);
     if( chatId && chatId.conversationId === action.payload.conversationId ){
-        console.log("UPDATE MESSAGES")
+        // console.log("UPDATE MESSAGES")
         yield put(
             updateMessages(action.payload)
         )
@@ -607,7 +607,7 @@ export function* onUpdateMessagesRequest(){
 }
 
 export function* createGroupListener(action){
-    console.log(action);
+    // console.log(action);
 
     //Regex for removing quotes around properties
     //participants = participants.replace(/\"([^(\")"]+)\":/g,"$1:");
@@ -639,7 +639,8 @@ export function* createGroupListener(action){
     try{
         let res = yield call(fetch, chat_url, createGroupRequestOptions);
         let resData = yield res.json();
-        console.log(resData);
+        // console.log("The restData inside createGroupRequest is: ");
+        // console.log(resData);
         if(resData.errors){
             yield put(createGroupFailure(resData.errors[0].message));
         }else{
@@ -658,7 +659,7 @@ export function* onCreateGroupRequest(){
 }
 
 export function* getConversations(action){
-    console.log("THE PAYLOAD IS: ", action.payload);
+    // console.log("THE PAYLOAD IS: ", action.payload);
 
     let getConversationsRequestBody = {
         query: `
@@ -693,7 +694,7 @@ export function* getConversations(action){
     try{
         let res = yield call(fetch, chat_url, getConversationsRequestOptions);
         let resData = yield res.json();
-        console.log(resData);
+        // console.log(resData);
         if(resData.errors){
             yield put(getConversationsFailure(resData.errors[0].message));
         }else{

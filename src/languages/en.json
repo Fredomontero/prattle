@@ -38,5 +38,6 @@
     "sidebar.messages":"Messages",
     "sidebar.friends":"Friends",
     "sidebar.settings": "Settings",
-    "sidebar.logout":"Logout"
+    "sidebar.logout":"Logout",
+    "sidebar.group": "Create Group"
 }

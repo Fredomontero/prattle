@@ -8,7 +8,7 @@ import io from 'socket.io-client';
 
 //This functions loads and returns the socket
 const connect = () => {
-    const socket = io(url);
+    const socket = io('/');
     return new Promise( resolve => {
         socket.on('connect', () => {
             resolve(socket);
