@@ -5,7 +5,9 @@ const initialState = {
     messages: null,
     chatId: null,
     route: null,
-    dashboardTab: "chats"
+    dashboardTab: "chats",
+    notifications: [],
+    notificationsBar: false
 };
 
 function rootReducer(state = initialState, action){
@@ -112,6 +114,12 @@ function rootReducer(state = initialState, action){
                 ...state,
                 error: action.payload
             }
+        case "UPDATE_NOTIFICATIONS":
+            return{
+                ...state,
+                notifications: [...state.notifications, action.payload],
+                notificationsBar: true
+            }
         case "SELECT_CONVERSATION":
             return{
                 ...state,
@@ -145,6 +153,11 @@ function rootReducer(state = initialState, action){
                 ...state,
                 dashboardTab: action.payload.section
             }
+        case "CLOSE_NOTIFICATION_BAR":
+            return{
+                ...state,
+                notificationsBar: false
+            }    
         default:
             return state;
     }

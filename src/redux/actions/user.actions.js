@@ -150,3 +150,17 @@ export const changeSection = section => ({
     type: "CHANGE_DASHBOARD_SECTION",
     payload: section
 });
+
+export const closeNotificationBar = () => ({
+    type: "CLOSE_NOTIFICATION_BAR"
+});
+
+export const updateNotificationsRequest = notification => ({
+    type: "UPDATE_NOTIFICATIONS_REQUEST",
+    payload: notification
+})
+
+export const updateNotifications = notification => ({
+    type: "UPDATE_NOTIFICATIONS",
+    payload: notification
+})

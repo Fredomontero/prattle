@@ -1,5 +1,6 @@
 import { put, call, take, fork } from "redux-saga/effects";
 import { updateMessagesRequest } from "../redux/actions/message.actions";
+import { updateNotifications, updateNotificationsRequest } from "../redux/actions/user.actions";
 import { eventChannel } from 'redux-saga';
 import io from 'socket.io-client';
 
@@ -18,10 +19,16 @@ const connect = () => {
 
 const subscribe = (socket) => {
     return eventChannel( emit => {
-        socket.on("MESSAGE_FROM_SERVER", (message) => {
+        socket.on("MESSAGE_FROM_SERVER", async (message) => {
             console.log("Message recieved from server: ");
             console.log(message);
+            let notification = {
+                type: "NEW_MESSAGE",
+                author: message.author,
+                text: `New message from ${message.author}`
+            };
             emit(updateMessagesRequest(message));
+            emit(updateNotificationsRequest(notification));
             // emit(messageRecieved(message));
         });
         return() => {};

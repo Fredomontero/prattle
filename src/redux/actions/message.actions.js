@@ -48,9 +48,9 @@ export const selectConversation = conversationId => ({
     payload: conversationId
 });
 
-export const updateMessagesRequest = message => ({
+export const updateMessagesRequest = data => ({
     type: "UPDATE_MESSAGES_REQUEST",
-    payload: message
+    payload: data
 });
 
 export const dontUpdateMessages = () => ({

@@ -18,7 +18,8 @@ import {
     handleRequestFailure,
     loadSocket,
     getConversationsSuccess,
-    getConversationsFailure
+    getConversationsFailure,
+    updateNotifications
 } from "../redux/actions/user.actions";
 
 import {
@@ -32,7 +33,7 @@ import {
     createGroupFailure
 } from "../redux/actions/message.actions";
 
-import { getChatId } from '../selectors/selectors';
+import { getChatId, getLoggedIn } from '../selectors/selectors';
 
 // const auth_url = 'http://localhost:4000/graphql';  //Development
 const auth_url = '/auth_url/';  //Production
@@ -713,6 +714,20 @@ export function* onGetConversationsRequest(){
     yield takeEvery("GET_CONVERSATIONS_REQUEST", getConversations)
 }
 
+export function* updateNotificationsWorker(action){
+    let loggedIn = yield select(getLoggedIn);
+    console.log("LOGGED IN: ", loggedIn.fullname);
+    if( loggedIn && loggedIn.fullname !== action.payload.author ){
+        yield put(
+            updateNotifications(action.payload)
+        )
+    }
+}
+
+export function* onUpdateNotificationsRequest(){
+    yield takeEvery("UPDATE_NOTIFICATIONS_REQUEST", updateNotificationsWorker)
+}
+
 //---------------------------------------------------------------
 
 export function* userSagas(){
@@ -728,6 +743,7 @@ export function* userSagas(){
                call(onSaveMessage),
                call(onUpdateMessagesRequest),
                call(onCreateGroupRequest),
-               call(onGetConversationsRequest)
+               call(onGetConversationsRequest),
+               call(onUpdateNotificationsRequest)
             ]);
 }
