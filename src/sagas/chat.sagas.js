@@ -4,11 +4,11 @@ import { eventChannel } from 'redux-saga';
 import io from 'socket.io-client';
 
 // const url = 'http://localhost:4001'; //Development
-// const url = '/socket/';  //Production
+// const url = '/socket.io/';  //Production
 
 //This functions loads and returns the socket
 const connect = () => {
-    const socket = io('/');
+    const socket = io('/', {transports: ['websocket']});
     return new Promise( resolve => {
         socket.on('connect', () => {
             resolve(socket);
