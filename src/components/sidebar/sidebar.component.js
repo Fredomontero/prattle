@@ -38,11 +38,11 @@ class SidebarComponent extends Component{
         return(
             <List className="sidebar-container">
                 <ListItem className="sidebar-item" button onClick={ () => this.changeConversationHandler('notifications') }>
-                    <ListItemIcon><Badge badgeContent={1} color="secondary"> <NotificationsIcon className="sidebar-icon"/> </Badge></ListItemIcon>
+                    <ListItemIcon><Badge badgeContent={ (this.props.loggedIn.requests) ? this.props.loggedIn.requests.length : 0 } color="secondary"> <NotificationsIcon className="sidebar-icon"/> </Badge></ListItemIcon>
                     <FormattedMessage id="sidebar.notifications" defaultMessage="Notifications" />
                 </ListItem>
                 <ListItem className="sidebar-item" button onClick={ () => this.changeConversationHandler('chats') }>
-                    <ListItemIcon><Badge badgeContent={1} color="secondary"> <ChatBubbleIcon className="sidebar-icon"/> </Badge></ListItemIcon>
+                    <ListItemIcon><ChatBubbleIcon className="sidebar-icon"/></ListItemIcon>
                     <FormattedMessage id="sidebar.messages" defaultMessage="Messages" />
                 </ListItem>
                 <ListItem className="sidebar-item" button onClick = {this.props.handler}>
@@ -72,8 +72,11 @@ const mapDispatchToProps = dispatch => ({
 });
 
 const mapStateToProps = (state) => {
-    const { dashboardTab } = state;
-    return { dashboardTab: dashboardTab }
+    const { dashboardTab, loggedIn } = state;
+    return { 
+        dashboardTab: dashboardTab,
+        loggedIn: loggedIn
+    }
 }
 
 export default connect(mapStateToProps, mapDispatchToProps)(SidebarComponent);

@@ -30,10 +30,11 @@ import {
     saveMessageFailure,
     dontUpdateMessages,
     createGroupSuccess,
-    createGroupFailure
+    createGroupFailure,
+    sendMessage
 } from "../redux/actions/message.actions";
 
-import { getChatId, getLoggedIn } from '../selectors/selectors';
+import { getChatId, getLoggedIn, getNotifications } from '../selectors/selectors';
 
 // const auth_url = 'http://localhost:4000/graphql';  //Development
 const auth_url = '/auth_url/';  //Production
@@ -68,7 +69,6 @@ export function* loginWithEmail(action){
     try{
         let res = yield call(fetch, auth_url, loginRequestOptions);
         let resData = yield res.json();
-        // console.log("ResData: ", resData);
         if(resData.errors){
             yield put(loginFailure(resData.errors[0].message));
         }else{
@@ -112,7 +112,6 @@ export function* createUser(action){
             }
         })
         let resData = yield res.json();
-        // console.log(resData);
         if(resData.errors){
             yield put(failToCreateUser(resData.errors[0].message));
         }else{
@@ -181,7 +180,6 @@ export function* fetchUser(){
     try{
         let res = yield call(fetch, auth_url, fetchUserRequestOptions);
         let resData = yield res.json();
-        // console.log("gotUser? : ", resData);
         if(resData.errors){
             yield put(fetchUserFailure(resData.errors[0].message));
         }else{
@@ -358,7 +356,6 @@ export function* onRetrieveUsers(){
 }
 
 export function* addContactRequest(action){
-    // console.log("Inside addContactRequest Saga");
     let addContactBody = {
         query: `
             mutation{
@@ -435,7 +432,11 @@ export function* resolveFriendshipRequest(action){
                     _id
                     fullname
                     email
-                    contacts
+                    contacts{
+                        _id
+                        fullname
+                        email
+                    }
                     requests{
                         requestId
                         sourceId
@@ -450,7 +451,17 @@ export function* resolveFriendshipRequest(action){
                         targetId
                         targetName
                     }
-                    conversations
+                    conversations{
+                        _id
+                        name
+                        participants{
+                            _id
+                            name
+                            addedAt
+                        }
+                        createdAt
+                        lastMessageAt
+                    }
                 }
             }
         `
@@ -468,12 +479,21 @@ export function* resolveFriendshipRequest(action){
     try{
         let res = yield call(fetch, chat_url, handleFriendshipRequestOptions);
         let resData = yield res.json();
+        let lastConversation = resData.data.handleFriendshipRequest.conversations[resData.data.handleFriendshipRequest.conversations.length - 1];
         if(resData.errors){
             yield put(handleRequestFailure(resData.errors[0].message));
         }else{
             yield put(
                 handleRequestSuccess(resData.data.handleFriendshipRequest)
             )
+            if(action.payload.value === true){
+                yield put(
+                    sendMessage({
+                        type: "JOIN_ROOM_REQUEST",
+                        conversation: lastConversation
+                    })
+                )
+            }
         }
     }catch(error){
         yield put(handleRequestFailure(error));   
@@ -559,23 +579,9 @@ export function* saveMessage(action){
     try{
         let res = yield call(fetch, messages_url, saveMessageOptions);
         let message = yield res.json();
-        // console.log("The result in Message is: ", message);
         if(message.errors){
             yield put(saveMessageFailure(message.errors[0].message));
         }else{
-            // console.log("ChatId.conversationId: ", chatId.conversationId);
-            // console.log("ID of the message: ", message.data.saveMessage.conversationId);
-            // if( chatId.conversationId === message.data.saveMessage.conversationId ){
-            //     console.log("UPDATE MESSAGES")
-            //     yield put(
-            //         updateMessages(message.data.saveMessage)
-            //     )
-            // }else{
-            //     console.log("SAVE MESSAGES SUCCESS")
-            //     yield put(
-            //         saveMessageSuccess(message.data.saveMessage)
-            //     )
-            // }
             yield put(saveMessageSuccess(message.data.saveMessage))
         }
     }catch(error){
@@ -592,7 +598,6 @@ export function* onSaveMessage(){
 export function* updateMessagesListener(action){
     let chatId = yield select(getChatId);
     if( chatId && chatId.conversationId === action.payload.conversationId ){
-        // console.log("UPDATE MESSAGES")
         yield put(
             updateMessages(action.payload)
         )
@@ -608,8 +613,6 @@ export function* onUpdateMessagesRequest(){
 }
 
 export function* createGroupListener(action){
-    // console.log(action);
-
     //Regex for removing quotes around properties
     //participants = participants.replace(/\"([^(\")"]+)\":/g,"$1:");
 
@@ -620,13 +623,17 @@ export function* createGroupListener(action){
                 ){
                     _id
                     name
+                    participants{
+                        _id
+                        name
+                        addedAt
+                    }
+                    createdAt
+                    lastMessageAt
                 }
             }
         `
     }
-
-    // console.log("QUERY CREATE GROUP");
-    // console.log(createGroupRequestBody.query);
     
     let createGroupRequestOptions = {
         method: 'POST',
@@ -640,13 +647,19 @@ export function* createGroupListener(action){
     try{
         let res = yield call(fetch, chat_url, createGroupRequestOptions);
         let resData = yield res.json();
-        // console.log("The restData inside createGroupRequest is: ");
-        // console.log(resData);
         if(resData.errors){
             yield put(createGroupFailure(resData.errors[0].message));
         }else{
             yield put(
                 createGroupSuccess(resData.data.createGroup )
+            )
+            yield put(
+                yield put(
+                    sendMessage({
+                        type: "JOIN_ROOM_REQUEST",
+                        conversation: resData.data.createGroup
+                    })
+                )
             )
         }
     }catch(error){
@@ -660,7 +673,6 @@ export function* onCreateGroupRequest(){
 }
 
 export function* getConversations(action){
-    // console.log("THE PAYLOAD IS: ", action.payload);
 
     let getConversationsRequestBody = {
         query: `
@@ -680,8 +692,6 @@ export function* getConversations(action){
         `
     };
 
-    // console.log("QUERY CREATE GROUP");
-    // console.log(createGroupRequestBody.query);
     
     let getConversationsRequestOptions = {
         method: 'POST',
@@ -695,14 +705,12 @@ export function* getConversations(action){
     try{
         let res = yield call(fetch, chat_url, getConversationsRequestOptions);
         let resData = yield res.json();
-        // console.log(resData);
         if(resData.errors){
             yield put(getConversationsFailure(resData.errors[0].message));
         }else{
             yield put(
                 getConversationsSuccess(resData.data.getConversations )
             )
-            // console.log("The conversations are: ", resData.data.getConversations);
         }
     }catch(error){
         yield put(getConversationsFailure(error));
@@ -716,8 +724,9 @@ export function* onGetConversationsRequest(){
 
 export function* updateNotificationsWorker(action){
     let loggedIn = yield select(getLoggedIn);
-    console.log("LOGGED IN: ", loggedIn.fullname);
-    if( loggedIn && loggedIn.fullname !== action.payload.author ){
+    let notifications = yield select(getNotifications);
+    var notificationTexts = notifications.map(notification => notification.text);
+    if( (loggedIn && loggedIn.fullname !== action.payload.author) && (!notificationTexts.includes(action.payload.text)) ){
         yield put(
             updateNotifications(action.payload)
         )
@@ -727,6 +736,95 @@ export function* updateNotificationsWorker(action){
 export function* onUpdateNotificationsRequest(){
     yield takeEvery("UPDATE_NOTIFICATIONS_REQUEST", updateNotificationsWorker)
 }
+
+export function* updateProfile(action){
+    var userId = (action) ? action.payload : "";
+    
+    let loadProfileBody = {
+        query: `
+            query {
+                loadProfile(userId: "${userId}"){
+                    _id
+                    fullname
+                    email
+                    contacts{
+                        _id
+                        fullname
+                        email
+                    }
+                    requests{
+                        requestId
+                        sourceId
+                        sourceName
+                        targetId
+                        targetName
+                    }
+                    pendingRequests{
+                        requestId
+                        sourceId
+                        sourceName
+                        targetId
+                        targetName
+                    }
+                    conversations{
+                        _id
+                        name
+                        participants{
+                            _id
+                            name
+                            addedAt
+                        }
+                        createdAt
+                        lastMessageAt
+                    }
+                }
+            }
+        `
+    };
+
+    let loadProfileOptions = {
+        method: 'POST',
+        body: JSON.stringify(loadProfileBody),
+        credentials: "include",
+        headers: {
+            'Content-Type': 'application/json'
+        }
+    };
+
+    try{
+        let res = yield call(fetch, chat_url, loadProfileOptions);
+        let userData = yield res.json();
+        if(userData.errors){
+            yield put(loadProfileFailure(userData.errors[0].message));
+        }else{
+            yield put(
+                loadProfileSuccess(userData.data.loadProfile)
+            )
+        }
+    }catch(error){
+        yield put(loadProfileFailure(error));
+    }
+}
+
+export function* onUpdateProfileRequest(){
+    yield takeEvery("UPDATE_PROFILE", updateProfile)
+ }
+
+export function* joinRoom(){
+    let loggedIn = yield select(getLoggedIn);
+    let { conversations } = loggedIn;
+    let conversationId = conversations[conversations.length-1]._id;
+    yield put(
+        sendMessage({
+            type: "JOIN_ROOM",
+            id: conversationId
+        })
+    )
+
+}
+ export function* onJoinRoomRequest(){
+    yield takeEvery("JOIN_ROOM_TRIGGER", joinRoom)
+ }
 
 //---------------------------------------------------------------
 
@@ -744,6 +842,8 @@ export function* userSagas(){
                call(onUpdateMessagesRequest),
                call(onCreateGroupRequest),
                call(onGetConversationsRequest),
-               call(onUpdateNotificationsRequest)
+               call(onUpdateNotificationsRequest),
+               call(onUpdateProfileRequest),
+               call(onJoinRoomRequest)
             ]);
 }

@@ -1,5 +1,6 @@
 import React, {Component} from "react"
 import { retrieveUsers, addContact } from "../../redux/actions/user.actions";
+import { sendMessage } from "../../redux/actions/message.actions";
 import { connect } from "react-redux";
 import { FormattedMessage } from 'react-intl';
 import Card from '@material-ui/core/Card';
@@ -28,12 +29,13 @@ class UsersComponent extends Component{
     }
 
     addcontactHandler = (e, id, fullname) => {
-        const { addContact } = this.props;
+        const { addContact, sendMessage } = this.props;
         e.target.className = "add-button-disabled";
         e.target.disabled = true;
         console.log("Current user data: ", this.props.currentuser._id + " " + this.props.currentuser.fullname);
         console.log("Target User: ", id + " " + fullname  )
         addContact(this.props.currentuser._id, this.props.currentuser.fullname, id, fullname);
+        sendMessage( "FRIENDSHIP_REQUEST", this.props.currentuser._id, id, `${this.props.currentuser.fullname} send you a friendship request`);
     }
 
     
@@ -105,14 +107,14 @@ function mapStateToProps(state){
     return { 
         tempData: (tempData) ? tempData : null,
         currentuser: (loggedIn) ? loggedIn : null,
-        contacts: loggedIn.contacts.map( contact => contact._id )
+        contacts: (loggedIn.contacts) ? (loggedIn.contacts.map( contact => contact._id )):[]
     }
   }
 
 const mapDispatchToProps = dispatch => ({
     addContact: (sourceId, sourceName, targetId, targetName) => dispatch(addContact({sourceId, sourceName, targetId, targetName,})),
-    retrieveUsers: (pattern) => dispatch(retrieveUsers({pattern}))
-    
+    retrieveUsers: (pattern) => dispatch(retrieveUsers({pattern})),
+    sendMessage: (type, source, target, text) => dispatch(sendMessage({type, source, target, text}))
 })
 
 export default connect(mapStateToProps, mapDispatchToProps)(UsersComponent);

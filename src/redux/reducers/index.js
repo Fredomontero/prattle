@@ -158,6 +158,14 @@ function rootReducer(state = initialState, action){
                 ...state,
                 notificationsBar: false
             }    
+        case "CREATE_GROUP_SUCCESS":
+            return{
+                ...state,
+                loggedIn: {
+                    ...state.loggedIn,
+                    conversations: [...state.loggedIn.conversations, action.payload]
+                }
+            }
         default:
             return state;
     }

@@ -6,14 +6,16 @@ import CardActionArea from '@material-ui/core/CardActionArea';
 import CardContent from '@material-ui/core/CardContent';
 import CardMedia from '@material-ui/core/CardMedia';
 import { handleRequest } from "../../redux/actions/user.actions";
+import { sendMessage } from "../../redux/actions/message.actions";
 
 import { FormattedMessage } from 'react-intl';
 
 class NotificationsComponent extends Component{
 
     friendshipRequestHandler(value, requestId, sourceId, sourceName, targetId, targetName){
-        const { handleRequest } = this.props;
+        const { handleRequest, sendMessage } = this.props;
         handleRequest(value, requestId, sourceId, sourceName, targetId, targetName);
+        sendMessage( "HANDLE_FRIENDSHIP_REQUEST", sourceId, targetId, `${targetName} accepted your friendship request`, value);
     }
 
     render(){
@@ -31,7 +33,7 @@ class NotificationsComponent extends Component{
                 }
                 <div className="requests-container">
                     {
-                        (this.props.currentUser.pendingRequests.length > 0)?(
+                        ( this.props.currentUser.pendingRequests.length > 0)?(
                             this.props.currentUser.pendingRequests.map( pendingRequest => {
                                 return(
                                     <Card className="request-card" key={pendingRequest.requestId}>
@@ -108,7 +110,8 @@ function mapStateToProps(state){
 }
 
 const mapDispatchToProps = dispatch => ({
-    handleRequest: (value, requestId, sourceId, sourceName, targetId, targetName) => dispatch(handleRequest({value, requestId, sourceId, sourceName, targetId, targetName}))
+    handleRequest: (value, requestId, sourceId, sourceName, targetId, targetName) => dispatch(handleRequest({value, requestId, sourceId, sourceName, targetId, targetName})),
+    sendMessage: (type, source, target, text, value) => dispatch(sendMessage({type, source, target, text, value}))
   })
 
 export default connect(mapStateToProps, mapDispatchToProps)(NotificationsComponent);

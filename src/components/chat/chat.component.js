@@ -21,7 +21,7 @@ class ChatComponent extends Component{
         this.state = { 
             chatId: null,
             messages: []
-         };
+        };
     }
 
     componentDidMount(){
@@ -36,7 +36,6 @@ class ChatComponent extends Component{
         var date = new Date(Date.now()).toLocaleString();
         var author = currentuser.fullname;
         var messageID = ObjectID();
-        // console.log("The message Id is: ", messageID)
         this.messageRef.current.value = "";
         saveMessage( messageID, this.state.chatId, author, text, date );
         sendMessage( messageID, author, text, date, this.state.chatId );
@@ -45,7 +44,6 @@ class ChatComponent extends Component{
     getUser = (conversation) => {
         let { currentuser } = this.props;
         let contactId = conversation.participants.filter( participant => participant._id !== currentuser._id ).map( participant => participant.name )[0];
-        // console.log(contactId)
         return contactId;
     }
 
@@ -54,7 +52,11 @@ class ChatComponent extends Component{
         this.setState({chatId: id});
         selectConversation(id);
         loadMessages(id);
-        console.log("The conversation Id is: ", id);
+    }
+
+    componentDidUpdate(){
+        const element = document.getElementById("target-item");
+        element.scrollIntoView({behavior: 'smooth'})
     }
     
     render(){
@@ -92,7 +94,7 @@ class ChatComponent extends Component{
                                 })
                             )
                         }
-                    </List>    
+                    </List>
                 </div>
                 <div className="chat-component">
                     <div className="chat-content">
@@ -118,6 +120,7 @@ class ChatComponent extends Component{
                             )
                         )
                     }
+                    <div id="target-item"></div>
                     </div>
                     {
                         (this.state.chatId === null)?(<br/>):(

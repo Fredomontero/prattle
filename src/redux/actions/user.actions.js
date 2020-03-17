@@ -158,9 +158,18 @@ export const closeNotificationBar = () => ({
 export const updateNotificationsRequest = notification => ({
     type: "UPDATE_NOTIFICATIONS_REQUEST",
     payload: notification
-})
+});
 
 export const updateNotifications = notification => ({
     type: "UPDATE_NOTIFICATIONS",
     payload: notification
-})
+});
+
+export const updateProfile = id => ({
+    type: "UPDATE_PROFILE",
+    payload: id
+});
+
+export const joinRoomTrigger = () => ({
+    type: "JOIN_ROOM_TRIGGER"
+});
