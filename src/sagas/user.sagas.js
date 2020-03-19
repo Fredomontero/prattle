@@ -430,38 +430,14 @@ export function* resolveFriendshipRequest(action){
                     targetName: "${action.payload.targetName}"
                 }){
                     _id
-                    fullname
-                    email
-                    contacts{
-                        _id
-                        fullname
-                        email
-                    }
-                    requests{
-                        requestId
-                        sourceId
-                        sourceName
-                        targetId
-                        targetName
-                    }
-                    pendingRequests{
-                        requestId
-                        sourceId
-                        sourceName
-                        targetId
-                        targetName
-                    }
-                    conversations{
+                    name
+                    participants{
                         _id
                         name
-                        participants{
-                            _id
-                            name
-                            addedAt
-                        }
-                        createdAt
-                        lastMessageAt
+                        addedAt
                     }
+                    createdAt
+                    lastMessageAt
                 }
             }
         `
@@ -479,7 +455,6 @@ export function* resolveFriendshipRequest(action){
     try{
         let res = yield call(fetch, chat_url, handleFriendshipRequestOptions);
         let resData = yield res.json();
-        let lastConversation = resData.data.handleFriendshipRequest.conversations[resData.data.handleFriendshipRequest.conversations.length - 1];
         if(resData.errors){
             yield put(handleRequestFailure(resData.errors[0].message));
         }else{
@@ -490,7 +465,7 @@ export function* resolveFriendshipRequest(action){
                 yield put(
                     sendMessage({
                         type: "JOIN_ROOM_REQUEST",
-                        conversation: lastConversation
+                        conversation: resData.data.handleFriendshipRequest
                     })
                 )
             }
@@ -654,12 +629,10 @@ export function* createGroupListener(action){
                 createGroupSuccess(resData.data.createGroup )
             )
             yield put(
-                yield put(
-                    sendMessage({
-                        type: "JOIN_ROOM_REQUEST",
-                        conversation: resData.data.createGroup
-                    })
-                )
+                sendMessage({
+                    type: "JOIN_ROOM_REQUEST",
+                    conversation: resData.data.createGroup
+                })
             )
         }
     }catch(error){

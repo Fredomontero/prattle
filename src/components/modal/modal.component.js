@@ -11,7 +11,8 @@ class ModalComponent extends Component{
         super(props);
         this.state = { 
             render: true,
-            participants: []
+            participants: [],
+            groupName: ""
          };
          
          this.groupNameRef = React.createRef();
@@ -49,6 +50,11 @@ class ModalComponent extends Component{
         }
     }
 
+    updateGroupName = () => {
+        this.setState({groupName: this.groupNameRef.current.value});
+    }
+
+
     render(){
         const { render } = this.state;
         const { currentuser } = this.props;
@@ -64,15 +70,15 @@ class ModalComponent extends Component{
                             <FormattedMessage id="create.group.title" defaultMessage="Create new group" /> 
                         </h3>
                         <p className="user-message">
-                            <FormattedMessage id="create.group.indications" defaultMessage="Type a name and add at least 3 participants" /> 
+                            <FormattedMessage id="create.group.indications" defaultMessage="Type a name and add at least 2 participants" /> 
                         </p>
                         <br/>
                         <FormattedMessage id="create.group.name" defaultMessage="Name of the group">
-                            { placeholder => <input className="name-input" type="text" id="name" placeholder={placeholder} autoComplete="off" ref={this.groupNameRef}/> }
+                            { placeholder => <input className="name-input" type="text" id="name" placeholder={placeholder} autoComplete="off" ref={this.groupNameRef} onChange={this.updateGroupName}/> }
                         </FormattedMessage><br/>
                         <div className="user-list">
                             {
-                                (currentuser && currentuser.contacts) ? (
+                                (currentuser && currentuser.contacts.length > 2) ? (
                                     currentuser.contacts.map( contact => {
                                         return(
                                             <div className="contact-container" key={contact._id} onClick={() => this.updateParticipants(contact)}>
@@ -83,12 +89,12 @@ class ModalComponent extends Component{
                                     })
                                 ):(
                                     <h5>
-                                        <FormattedMessage id="create.group.contacts.message" defaultMessage="You don't have any contacts" /> 
+                                        <FormattedMessage id="create.group.contacts.message" defaultMessage="You don't have enough contacts for creating a group" /> 
                                     </h5>
                                 )
                             }
                         </div>
-                        <div className={ (this.state.participants.length > 2 && this.groupNameRef.current.value.length > 0) ? "modal-button enabled": "modal-button disabled" } onClick={this.createGroup}>
+                        <div className={ (this.state.participants.length > 1 && this.state.groupName.length > 0) ? "modal-button enabled": "modal-button disabled" } onClick={this.createGroup}>
                             <FormattedMessage id="create.group.button" defaultMessage="Create Group" />
                         </div>
                     </div>

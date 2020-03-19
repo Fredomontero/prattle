@@ -36,7 +36,6 @@ class DashboardPage extends Component{
     }
 
     modalHandler = () => {
-        console.log("Inside modalHandler");
         this.setState({modal: !this.state.modal});
     }
 

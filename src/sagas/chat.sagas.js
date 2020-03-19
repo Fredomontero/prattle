@@ -1,6 +1,6 @@
 import { put, call, take, fork } from "redux-saga/effects";
 import { updateMessagesRequest, sendMessage } from "../redux/actions/message.actions";
-import { updateNotificationsRequest, updateProfile } from "../redux/actions/user.actions";
+import { updateNotificationsRequest, updateProfile, getConversationsRequest } from "../redux/actions/user.actions";
 import { eventChannel } from 'redux-saga';
 import io from 'socket.io-client';
 
@@ -29,31 +29,42 @@ const subscribe = (socket) => {
             emit(updateNotificationsRequest(notification));
             // emit(messageRecieved(message));
         });
+        
         socket.on("LOGGED_IN", (notification) => {
             emit(updateNotificationsRequest(notification));
         });
+
         socket.on("UPDATE_REQUESTS", (user) => {
             emit(updateProfile(user._id));
         });
+
         socket.on("FRIENDSHIP_REQUEST_NOTIFICATION", (notification) => {
             emit(updateNotificationsRequest({type: notification.type, author: notification.author, text: notification.text}));
             emit(updateProfile(notification._id));
         });
+
         socket.on("FRIENDSHIP_REQUEST_ACCEPTED", (notification) => {
             emit(updateNotificationsRequest({type: notification.type, author: notification.author, text: notification.text}));
             emit(updateProfile(notification._id));
         });
+
         socket.on("UPDATE_REQUESTS_AND_JOIN_ROOM", (user) => {
             //update profile data
             emit(updateProfile(user._id));
         });
+
         socket.on("JOIN_ROOM_REQUEST", (conversation) => {
+            console.log("[JOIN_ROOM_REQUEST]");
+            console.log("The conversation here is: ", conversation);
             let msg = {
                 type: "JOIN_ROOM",
                 id: conversation.id
             }
+            console.log("We emit this: ", msg);
+            emit(getConversationsRequest({_id:conversation.self}))
             emit(sendMessage(msg));
         });
+
         socket.on("ROOM_JOINED", () => {
             let notification = {
                 type: "ROOM_JOINED",

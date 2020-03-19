@@ -82,6 +82,10 @@ function rootReducer(state = initialState, action){
         case "HANDLE_FRIENDSHIP_REQUEST_SUCCESS":
             return{
                 ...state,
+                loggedIn: {
+                    ...state.loggedIn,
+                    conversations: [...state.loggedIn.conversations, action.payload]
+                },
                 error: null
             }
         case "HANDLE_FRIENDSHIP_REQUEST_FAILURE":
@@ -138,15 +142,16 @@ function rootReducer(state = initialState, action){
         case "GET_CONVERSATIONS_SUCCESS":
             return{
                 ...state,
+                loggedIn: {
+                    ...state.loggedIn,
+                    conversations: action.payload
+                },
                 error: null
             }
         case "GET_CONVERSATIONS_FAILURE":
             return{
                 ...state,
-                loggedIn: {
-                    ...state.loggedIn,
-                    conversations: action.payload
-                }
+                error: action.payload
             }
         case "CHANGE_DASHBOARD_SECTION":
             return{
