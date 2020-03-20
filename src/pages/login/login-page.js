@@ -45,16 +45,20 @@ class LoginPage extends Component {
                 <ContextConsumer>
                     {props => {
                         return(
-                            <select onChange={props.selectLanguage}>
-                                <option value="en">English</option>
-                                <option value="es">Spanish</option>
-                                <option value="por">Portuguese</option>
-                            </select>
+                            <div className="login-container">
+                                <p className="language-label">Select your laguage: </p>
+                                <select onChange={props.selectLanguage}>
+                                    <option value="en">English</option>
+                                    <option value="es">Spanish</option>
+                                    <option value="por">Portuguese</option>
+                                </select>
+                            </div> 
                         )
                     }}
                     
                 </ContextConsumer>
                 <div className="signup-container">
+                        <img className="prattle-logo" src={require("../../assets/images/penacho.png")} alt="penacho-icon"/>
                         <h1>
                             <FormattedMessage
                                 id="login.header"

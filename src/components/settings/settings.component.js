@@ -3,10 +3,6 @@ import { FormattedMessage } from 'react-intl';
 import './settings.component.css';
 
 class SettingsComponent extends Component{
-    constructor(props){
-        super(props);
-        console.log("This is the Settings Component");
-    }
     
     render(){
         return(

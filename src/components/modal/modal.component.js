@@ -41,13 +41,14 @@ class ModalComponent extends Component{
     createGroup = () => {
         const { createGroupRequest, currentuser } = this.props;
         const groupName = this.groupNameRef.current.value;
-        if(groupName.length > 0 && this.state.participants.length > 2){
+        if(groupName.length > 0 && this.state.participants.length > 1){
             createGroupRequest([{
                 _id: currentuser._id,
                 name: currentuser.fullname,
                 addedAt: new Date(Date.now()).toLocaleString()
             }, ...this.state.participants], groupName);
         }
+        this.props.handler();
     }
 
     updateGroupName = () => {

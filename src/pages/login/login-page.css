@@ -3,3 +3,19 @@
     cursor: pointer;
     display: inline-flex;
 }
+
+.prattle-logo{
+    width: 150px;
+}
+
+.login-container{
+    padding: 10px;
+}
+
+.language-label{
+    display: inline;
+}
+
+.langage-select{
+    width: 100px;
+}

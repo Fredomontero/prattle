@@ -36,11 +36,8 @@ import {
 
 import { getChatId, getLoggedIn, getNotifications } from '../selectors/selectors';
 
-// const auth_url = 'http://localhost:4000/graphql';  //Development
 const auth_url = '/auth_url/';  //Production
-// const chat_url = 'http://localhost:4001/graphql'; //Development
 const chat_url = '/chat_url/'; //Production
-// const messages_url = 'http://localhost:4002/graphql'; //Development
 const messages_url = '/messages_url/'; //Production
 
 export function* loginWithEmail(action){

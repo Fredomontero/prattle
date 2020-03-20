@@ -4,8 +4,6 @@ import { updateNotificationsRequest, updateProfile, getConversationsRequest } fr
 import { eventChannel } from 'redux-saga';
 import io from 'socket.io-client';
 
-// const url = 'http://localhost:4001'; //Development
-// const url = '/socket.io/';  //Production
 
 //This functions loads and returns the socket
 const connect = () => {
@@ -27,7 +25,6 @@ const subscribe = (socket) => {
             };
             emit(updateMessagesRequest(message));
             emit(updateNotificationsRequest(notification));
-            // emit(messageRecieved(message));
         });
         
         socket.on("LOGGED_IN", (notification) => {
@@ -54,13 +51,10 @@ const subscribe = (socket) => {
         });
 
         socket.on("JOIN_ROOM_REQUEST", (conversation) => {
-            console.log("[JOIN_ROOM_REQUEST]");
-            console.log("The conversation here is: ", conversation);
             let msg = {
                 type: "JOIN_ROOM",
                 id: conversation.id
             }
-            console.log("We emit this: ", msg);
             emit(getConversationsRequest({_id:conversation.self}))
             emit(sendMessage(msg));
         });

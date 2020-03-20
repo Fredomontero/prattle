@@ -13,7 +13,6 @@ import "./users.component.css";
 class UsersComponent extends Component{
     constructor(props){
         super(props);
-        // console.log("This is the Users Component");
 
         this.state = {
             pattern: "",
@@ -32,8 +31,6 @@ class UsersComponent extends Component{
         const { addContact, sendMessage } = this.props;
         e.target.className = "add-button-disabled";
         e.target.disabled = true;
-        console.log("Current user data: ", this.props.currentuser._id + " " + this.props.currentuser.fullname);
-        console.log("Target User: ", id + " " + fullname  )
         addContact(this.props.currentuser._id, this.props.currentuser.fullname, id, fullname);
         sendMessage( "FRIENDSHIP_REQUEST", this.props.currentuser._id, id, `${this.props.currentuser.fullname} send you a friendship request`);
     }
@@ -56,8 +53,6 @@ class UsersComponent extends Component{
                 </div>
                 {/*Users container*/}
                 <div className="users-container">
-                {console.log("currentUser: ", currentuser)}
-                {console.log("tempData: ", this.props.tempData)}
                 {
                     (!this.props.tempData)?(
                         <h2>
@@ -102,8 +97,6 @@ class UsersComponent extends Component{
 
 function mapStateToProps(state){
     const { tempData, loggedIn } = state;
-    // if(tempData && loggedIn)
-    //     console.log("tempData: ", tempData, "Current user is: ", loggedIn);
     return { 
         tempData: (tempData) ? tempData : null,
         currentuser: (loggedIn) ? loggedIn : null,

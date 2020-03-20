@@ -30,7 +30,6 @@ class SidebarComponent extends Component{
 
     changeConversationHandler = (section) => {
         const { changeSection } = this.props;
-        console.log("The section is: ", section);
         changeSection(section);
     }
     
